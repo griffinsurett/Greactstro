@@ -522,6 +522,46 @@ const itemsDefaultHasPage = meta.itemsHasPage ?? false;
       }
     </div>
 
+        {
+      /* ︎︎🆕 Default items in content-section (only if no heading/top placement) */
+    }
+    {
+      isDynamic &&
+        !itemPlacementArray.includes("top-content-section") &&
+        !itemPlacementArray.includes("section-heading-area") &&
+        !itemPlacementArray.includes("bottom-content-section") && (
+          <>
+            <slot name="aboveItemsInjection" />
+            <ItemsTemplate
+              items={items}
+              collection={collectionName}
+              query={queryType}
+              itemsClass={itemsClass}
+              itemClass={itemClass}
+              ItemComponent={finalComponent}
+              HasPage={itemsDefaultHasPage}
+              pathname={Astro.url.pathname}
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              manualOrder={manualOrder}
+              client={finalClient}
+              slider={sliderConfig}
+            />
+            <slot name="belowItemsInjection" />
+          </>
+        )
+    }
+    
+    {
+      !childPlacementArray.includes("section-heading-area") &&
+!childPlacementArray.includes("top-content-section") &&
+!childPlacementArray.includes("bottom-content-section") && (
+        <div class={childSlotClass}>
+          <slot />
+        </div>
+      )
+    }
+
         { bottomPlacementArray.includes("content-section") && (
     <div class={`bottom-content-section ${bottomContentClass}`}>
 
@@ -597,36 +637,6 @@ const itemsDefaultHasPage = meta.itemsHasPage ?? false;
     <slot name="imageColumn" />
   </div>
 )}
-    
-    {
-      /* ︎︎🆕 Default items in content-section (only if no heading/top placement) */
-    }
-    {
-      isDynamic &&
-        !itemPlacementArray.includes("top-content-section") &&
-        !itemPlacementArray.includes("section-heading-area") &&
-        !itemPlacementArray.includes("bottom-content-section") && (
-          <>
-            <slot name="aboveItemsInjection" />
-            <ItemsTemplate
-              items={items}
-              collection={collectionName}
-              query={queryType}
-              itemsClass={itemsClass}
-              itemClass={itemClass}
-              ItemComponent={finalComponent}
-              HasPage={itemsDefaultHasPage}
-              pathname={Astro.url.pathname}
-              sortBy={sortBy}
-              sortOrder={sortOrder}
-              manualOrder={manualOrder}
-              client={finalClient}
-              slider={sliderConfig}
-            />
-            <slot name="belowItemsInjection" />
-          </>
-        )
-    }
 
     {
       isDynamic &&
@@ -688,16 +698,6 @@ const itemsDefaultHasPage = meta.itemsHasPage ?? false;
             })}
           </div>
         )
-    }
-
-    {
-      !childPlacementArray.includes("section-heading-area") &&
-!childPlacementArray.includes("top-content-section") &&
-!childPlacementArray.includes("bottom-content-section") && (
-        <div class={childSlotClass}>
-          <slot />
-        </div>
-      )
     }
   </div>
 </section>
