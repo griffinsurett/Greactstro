@@ -49,3 +49,7 @@ export function getRootItems(items) {
 export function hasMenuChildren(item, allItems, hierarchical) {
   return hierarchical && getChildItems(getMenuId(item), allItems).length > 0;
 }
+
+export function isActive(currentPath, linkPath) {
+  return currentPath === linkPath;
+}

@@ -5,6 +5,7 @@ import {
   getMenuLink,
   getChildItems,
   hasMenuChildren,
+  isActive,
 } from "@/utils/menuUtils.js";
 import Submenu from "./Submenu.astro";
 import Button from "@/components/Button/Button.jsx";
@@ -31,18 +32,22 @@ const {
   },
 } = Astro.props;
 
-const thisId     = getMenuId(item);
-const childItems = getChildItems(thisId, allItems);
+const thisId      = getMenuId(item);
+const childItems  = getChildItems(thisId, allItems);
 const hasChildren = hasMenuChildren(item, allItems, hierarchical);
-const SubmenuComponent = submenu.component ?? Submenu;
----
+const SubmenuComp = submenu.component ?? Submenu;
 
+const currentPath = Astro.url.pathname;
+const link        = getMenuLink(item, collectionName);
+const active      = isActive(currentPath, link);
+---
 <li role="none" class={`group relative menu-item ${itemClass}`}>
   <Button
     variant="link"
     as="a"
-    href={getMenuLink(item, collectionName)}
-    class={linkClass}
+    href={link}
+    className={`${linkClass} ${active ? "text-[var(--color-secondary)]" : ""}`}
+    aria-current={active ? "page" : undefined}
     rel="noopener noreferrer"
     role="menuitem"
     aria-haspopup={hasChildren ? "true" : undefined}
@@ -58,17 +63,14 @@ const SubmenuComponent = submenu.component ?? Submenu;
     )}
     <span>{item.data.title}</span>
     {hasChildren && (
-      <span
-        class="submenu-arrow inline-block ml-1"
-        aria-hidden="true"
-      >
+      <span class="submenu-arrow inline-block ml-1" aria-hidden="true">
         ▼
       </span>
     )}
   </Button>
 
   {hasChildren && (
-    <SubmenuComponent
+    <SubmenuComp
       allItems={allItems}
       parentId={thisId}
       childItems={childItems}

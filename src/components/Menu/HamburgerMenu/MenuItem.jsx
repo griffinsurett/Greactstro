@@ -1,13 +1,14 @@
 // src/components/Menu/HamburgerMenu/MenuItem.jsx
 import React, { useState } from "react";
-import ClientItemsTemplate from "@/components/ItemsTemplates/ClientItemsTemplate.jsx";
-import Button from "@/components/Button/Button.jsx";
 import {
   getMenuId,
   getMenuLink,
   getChildItems,
   hasMenuChildren,
+  isActive,
 } from "@/utils/menuUtils.js";
+import Button from "@/components/Button/Button.jsx";
+import ClientItemsTemplate from "@/components/ItemsTemplates/ClientItemsTemplate.jsx";
 
 export default function MobileMenuItem({
   item,
@@ -16,33 +17,35 @@ export default function MobileMenuItem({
   linkClass = "",
   hierarchical = true,
   submenu = null,
-  checkboxId,
   collectionName,
   HasPage,
   onItemClick,
 }) {
   const [open, setOpen] = useState(false);
 
-  const thisId = getMenuId(item);
+  const thisId   = getMenuId(item);
   const children = getChildItems(thisId, allItems);
-  const hasKids = hasMenuChildren(item, allItems, hierarchical);
-  const link = getMenuLink(item, collectionName);
+  const hasKids  = hasMenuChildren(item, allItems, hierarchical);
+  const link     = getMenuLink(item, collectionName);
+
+  // only in browser
+  const currentPath = typeof window !== "undefined" ? window.location.pathname : "";
+  const active      = isActive(currentPath, link);
 
   return (
     <div className={`menu-item ${itemClass}`}>
-      <div className={`flex w-full items-center justify-between ${linkClass}`}>
-        {/* Title always navigates */}
+      <div className={`flex w-full items-center justify-between`}>
         <Button
           as="a"
           variant="link"
           href={link}
-          className="flex-1 text-left"
+          className={`flex-1 text-left ${linkClass} ${active ? "text-[var(--color-secondary)]" : ""}`}
           onClick={onItemClick}
+          aria-current={active ? "page" : undefined}
         >
           {item.data.title}
         </Button>
 
-        {/* Only show a toggle arrow if there are children */}
         {hasKids && (
           <Button
             as="button"
@@ -52,17 +55,14 @@ export default function MobileMenuItem({
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
-                setOpen((prev) => !prev);
+                setOpen((p) => !p);
               }
             }}
             className="ml-2 p-1"
             aria-haspopup="true"
             aria-expanded={open}
           >
-            <span
-              className={`submenu-arrow`}
-              aria-hidden="true"
-            >
+            <span className="submenu-arrow" aria-hidden="true">
               ▼
             </span>
           </Button>
@@ -86,7 +86,6 @@ export default function MobileMenuItem({
                 linkClass: submenu.subMenuItem.props.linkClass,
                 hierarchical: submenu.subMenuItem.props.hierarchical,
                 submenu,
-                checkboxId,
                 collectionName,
                 HasPage,
                 onItemClick,

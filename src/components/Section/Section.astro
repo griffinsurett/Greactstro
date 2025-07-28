@@ -55,6 +55,7 @@ const {
   childPlacement: rawChildPlacement = "",
   buttonsPlacement: rawButtonsPlacement = "",
   imageColumnClass: rawImageColumnClass = "",
+  imageColPlacement: rawImageColPlacement = "",
   childSlotClass: rawChildSlotClass = "",
   client: rawClient,
   slider: rawSlider,
@@ -183,6 +184,11 @@ const itemPlacement =
   variantDefaults.itemPlacement ||
   defaultSection.itemPlacement ||
   "";
+  const imageColPlacement =
+  rawImageColPlacement ||
+  variantDefaults.imageColPlacement ||
+  defaultSection.imageColPlacement ||
+  "content-section";
 const childPlacement =
   rawChildPlacement ||
   variantDefaults.childPlacement ||
@@ -201,6 +207,12 @@ const bottomPlacementArray = Array.isArray(bottomPlacement)
   : bottomPlacement
     ? [bottomPlacement]
     : [];
+    const imageColPlacementArray = Array.isArray(imageColPlacement)
+  ? imageColPlacement
+  : imageColPlacement
+    ? [imageColPlacement]
+    : [];
+
 const itemPlacementArray = Array.isArray(itemPlacement)
   ? itemPlacement
   : itemPlacement
@@ -365,6 +377,12 @@ const itemsDefaultHasPage = meta.itemsHasPage ?? false;
         </>
       )}
 
+      {imageColPlacementArray.includes("bottom-content-section") && (
+  <div class={imageColumnClass}>
+    <slot name="imageColumn" />
+  </div>
+)}
+
       {/* ︎︎🆕 Child slot in bottom-area */}
       {childPlacementArray.includes("bottom-content-section") && (
         <div class={childSlotClass}>
@@ -404,7 +422,12 @@ const itemsDefaultHasPage = meta.itemsHasPage ?? false;
       )}
 
       {/* ── optional “image column” */}
-
+{/* 🖼️ Dynamic Image Column Placement */}
+{imageColPlacementArray.includes("top-content-section") && (
+  <div class={imageColumnClass}>
+    <slot name="imageColumn" />
+  </div>
+)}
       {/* ︎︎🆕 Image column (optional) */}
       
       {childPlacementArray.includes("top-content-section") && <slot />}
@@ -532,6 +555,12 @@ const itemsDefaultHasPage = meta.itemsHasPage ?? false;
         </div>
       )}
 
+      {imageColPlacementArray.includes("bottom-content-section") && (
+  <div class={imageColumnClass}>
+    <slot name="imageColumn" />
+  </div>
+)}
+
       {/* ︎︎🆕 Buttons in bottom-area */}
       {buttonsPlacementArray.includes("bottom-content-section") &&
         buttonsArray.length > 0 && (
@@ -563,11 +592,11 @@ const itemsDefaultHasPage = meta.itemsHasPage ?? false;
     </div>
       )}
 
-      {/* ── optional “image column” */}
-    <div class={imageColumnClass}>
-      {/* or let callers drop in a static <Image> or anything */}
-      <slot name="imageColumn" />
-    </div>
+    {imageColPlacementArray.includes("content-section") && (
+  <div class={imageColumnClass}>
+    <slot name="imageColumn" />
+  </div>
+)}
     
     {
       /* ︎︎🆕 Default items in content-section (only if no heading/top placement) */

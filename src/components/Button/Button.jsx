@@ -3,73 +3,68 @@ import ButtonIcon from "./ButtonIcon";
 import { ButtonVariants } from "./ButtonVariants.js";
 
 export default function Button({
-  as: ComponentProp,
+  as = "button",
   type = "button",
+  href,
+  disabled = false,
   onClick,
-  disabled,
   children,
   className = "",
-  href,
   variant = "primary",
-  iconProps = {},      // ← grouped icon props
-  showIcon = true,
+  iconProps = {},      // { icon, hoverOnly, position, className }
   ...props
 }) {
   const { variantClasses, buttonClasses, iconDefaults } =
     ButtonVariants[variant] || ButtonVariants.primary;
 
-  // Merge defaults → overrides
+  // merge variant defaults with user overrides
   const {
     icon: defaultIcon,
     hoverOnly: defaultHover,
-    animateIcon: defaultAnimate,
     position: defaultPosition = "right",
-    className: defaultIconClass = ""
+    className: defaultIconClass = "",
   } = iconDefaults;
-
   const {
     icon: overrideIcon,
     hoverOnly: overrideHover,
-    animateIcon: overrideAnimate,
     position: overridePosition,
-    className: overrideIconClass
+    className: overrideIconClass,
   } = iconProps;
 
-  const finalIcon        = overrideIcon      ?? defaultIcon;
-  const finalHoverOnly   = overrideHover     ?? defaultHover;
-  const finalAnimateIcon = overrideAnimate   ?? defaultAnimate;
-  const finalPosition    = overridePosition  ?? defaultPosition;
-  const finalIconClass   = overrideIconClass ?? defaultIconClass;
+  const finalIcon       = overrideIcon      ?? defaultIcon;
+  const finalHoverOnly  = overrideHover     ?? defaultHover;
+  const finalPosition   = overridePosition  ?? defaultPosition;
+  const finalIconClass  = overrideIconClass ?? defaultIconClass;
 
-  let combinedClasses = [className, variantClasses, buttonClasses]
+  // pick your tag
+  const Tag = href && !disabled ? "a" : as;
+  const classes = [
+    className,
+    variantClasses,
+    buttonClasses,
+    disabled ? "pointer-events-none opacity-50" : "",
+  ]
     .filter(Boolean)
     .join(" ");
 
-  const isDisabled = disabled ?? false;
-  const Tag = isDisabled
-    ? "button"
-    : ComponentProp || (href ? "a" : "button");
-
   const extra = { ...props };
   if (Tag === "button") {
-    extra.disabled = isDisabled;
+    extra.type = type;
+    extra.disabled = disabled;
   } else {
-    extra.href = isDisabled ? undefined : href;
-    if (isDisabled) combinedClasses += " pointer-events-none opacity-50";
+    extra.href = disabled ? undefined : href;
   }
 
   return (
     <Tag
-      {...(Tag === "button" ? { type } : {})}
-      onClick={isDisabled ? undefined : onClick}
-      className={combinedClasses}
+      className={classes}
+      onClick={disabled ? undefined : onClick}
       {...extra}
     >
-      {showIcon && finalPosition === "left" && (
+      {finalIcon && finalPosition === "left" && (
         <ButtonIcon
           icon={finalIcon}
           hoverOnly={finalHoverOnly}
-          animateIcon={finalAnimateIcon}
           position="left"
           className={finalIconClass}
         />
@@ -77,11 +72,10 @@ export default function Button({
 
       {children}
 
-      {showIcon && finalPosition === "right" && (
+      {finalIcon && finalPosition === "right" && (
         <ButtonIcon
           icon={finalIcon}
           hoverOnly={finalHoverOnly}
-          animateIcon={finalAnimateIcon}
           position="right"
           className={finalIconClass}
         />
