@@ -286,10 +286,8 @@ const itemsDefaultHasPage = meta.itemsHasPage ?? false;
   id={sectionId}
   data-collection={collectionName}
   class={`${sectionClass} relative w-full`}
-  {...props}
->
+  {...props}>
   {backgroundMedia && <BackgroundMedia backgroundMedia={backgroundMedia} />}
-
   <div class={`content-section ${contentClass} max-w-full z-10 ${isDynamic ? "" : ""}`}>
 
     <div class={`top-content-section ${topContentClass}`}>
