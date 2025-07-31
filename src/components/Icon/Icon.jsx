@@ -13,6 +13,12 @@ export default function Icon({ icon, className = "" }) {
     return <img src={icon.src} alt="" className={className} loading="lazy" />;
   }
 
+  if (typeof icon === "function") {
+   const Comp = icon;
+   return <Comp className={className} />;
+  }
+
+
   // 3) URL or raw SVG string or emoji/text
   if (typeof icon === "string") {
     const isUrl     = icon.startsWith("http") || icon.startsWith("/");
