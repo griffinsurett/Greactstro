@@ -1,0 +1,278 @@
+---
+// src/components/Section/Variants/CustomGrid.astro
+// Maximum flexibility grid system with CSS Grid and Flexbox controls
+
+interface Props {
+  // Grid Properties
+  gridTemplateColumns?: string;
+  gridTemplateRows?: string;
+  gridAutoFlow?: 'row' | 'column' | 'dense';
+  gridAutoRows?: string;
+  gridAutoColumns?: string;
+  
+  // Flexbox Properties
+  display?: 'grid' | 'flex' | 'inline-grid' | 'inline-flex';
+  flexDirection?: 'row' | 'row-reverse' | 'col' | 'col-reverse';
+  flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse';
+  justifyContent?: 'start' | 'end' | 'center' | 'between' | 'around' | 'evenly';
+  alignItems?: 'start' | 'end' | 'center' | 'baseline' | 'stretch';
+  alignContent?: 'start' | 'end' | 'center' | 'between' | 'around' | 'stretch';
+  
+  // Spacing & Sizing
+  gap?: string;
+  rowGap?: string;
+  columnGap?: string;
+  minHeight?: string;
+  maxHeight?: string;
+  minWidth?: string;
+  maxWidth?: string;
+  
+  // Responsive Breakpoints
+  responsive?: {
+    sm?: Partial<Props>;
+    md?: Partial<Props>;
+    lg?: Partial<Props>;
+    xl?: Partial<Props>;
+  };
+  
+  // Advanced Features
+  aspectRatio?: string;
+  overflow?: 'visible' | 'hidden' | 'scroll' | 'auto';
+  position?: 'relative' | 'absolute' | 'fixed' | 'sticky';
+  zIndex?: string;
+  
+  // Animation
+  animation?: boolean;
+  animationDelay?: string;
+  animationDuration?: string;
+  animationEasing?: string;
+  
+  // Background & Text
+  backgroundColor?: string;
+  textColor?: string;
+  
+  // Section Styling
+  sectionPadding?: string;
+}
+
+const {
+  // Grid Properties
+  gridTemplateColumns = 'repeat(auto-fit, minmax(250px, 1fr))',
+  gridTemplateRows = 'auto',
+  gridAutoFlow = 'row',
+  gridAutoRows = 'auto',
+  gridAutoColumns = 'auto',
+  
+  // Flexbox Properties
+  display = 'grid',
+  flexDirection = 'row',
+  flexWrap = 'wrap',
+  justifyContent = 'start',
+  alignItems = 'start',
+  alignContent = 'start',
+  
+  // Spacing & Sizing
+  gap = 'var(--spacing-lg)',
+  rowGap = 'var(--spacing-lg)',
+  columnGap = 'var(--spacing-lg)',
+  minHeight = 'auto',
+  maxHeight = 'none',
+  minWidth = 'auto',
+  maxWidth = 'none',
+  
+  // Responsive Breakpoints
+  responsive = {},
+  
+  // Advanced Features
+  aspectRatio = 'auto',
+  overflow = 'visible',
+  position = 'relative',
+  zIndex = 'auto',
+  
+  // Animation
+  animation = false,
+  animationDelay = '0s',
+  animationDuration = '0.3s',
+  animationEasing = 'ease',
+  
+  // Background & Text
+  backgroundColor,
+  textColor,
+  
+  // Section Styling
+  sectionPadding = "py-[var(--spacing-xl)]"
+} = Astro.props;
+
+// Check if backgroundColor is a Tailwind class or CSS value
+const isTailwindClass = backgroundColor && backgroundColor.startsWith('bg-');
+const bgClass = isTailwindClass ? backgroundColor : '';
+const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundColor}` : '';
+const textStyle = textColor ? `color: ${textColor}` : '';
+
+// Generate responsive classes and handle grid columns properly
+const responsiveClasses = Object.entries(responsive).map(([breakpoint, props]) => {
+  const classes = [];
+  if (props.display) classes.push(`${breakpoint}:${props.display}`);
+  if (props.gridTemplateColumns) {
+    // Handle different column formats
+    if (props.gridTemplateColumns.includes('repeat(')) {
+      // For repeat functions, we need to create custom CSS
+      classes.push(`${breakpoint}:custom-grid-cols`);
+    } else {
+      classes.push(`${breakpoint}:grid-cols-${props.gridTemplateColumns}`);
+    }
+  }
+  if (props.flexDirection) classes.push(`${breakpoint}:flex-${props.flexDirection}`);
+  if (props.gap) classes.push(`${breakpoint}:gap-${props.gap}`);
+  return classes.join(' ');
+}).filter(Boolean).join(' ');
+
+// Generate custom CSS properties
+const customStyles = {
+  '--grid-template-columns': gridTemplateColumns,
+  '--grid-template-rows': gridTemplateRows,
+  '--grid-auto-flow': gridAutoFlow,
+  '--grid-auto-rows': gridAutoRows,
+  '--grid-auto-columns': gridAutoColumns,
+  '--gap': gap,
+  '--row-gap': rowGap,
+  '--column-gap': columnGap,
+  '--min-height': minHeight,
+  '--max-height': maxHeight,
+  '--min-width': minWidth,
+  '--max-width': maxWidth,
+  '--aspect-ratio': aspectRatio,
+  '--z-index': zIndex,
+  '--animation-delay': animationDelay,
+  '--animation-duration': animationDuration,
+  '--animation-easing': animationEasing
+};
+
+const styleString = Object.entries(customStyles)
+  .map(([key, value]) => `${key}: ${value}`)
+  .join('; ');
+
+// Generate inline styles for immediate gap application
+const inlineStyles = `${styleString}; gap: ${gap}; row-gap: ${rowGap}; column-gap: ${columnGap};`;
+---
+
+<div 
+  class={`custom-grid ${display} ${display === 'grid' ? 'grid' : 'flex'} ${display === 'flex' ? `flex-${flexDirection} flex-${flexWrap} justify-${justifyContent} items-${alignItems} content-${alignContent}` : ''} ${responsiveClasses} ${animation ? 'animate-custom-grid' : ''} ${bgClass} ${sectionPadding}`}
+  style={`${inlineStyles}${bgStyle ? `; ${bgStyle}` : ''}`}
+>
+  <slot name="items" />
+  <slot />
+</div>
+
+<style>
+  .custom-grid {
+    width: 100%;
+    position: var(--position, relative);
+    overflow: var(--overflow, visible);
+    z-index: var(--z-index, auto);
+    min-height: var(--min-height, auto);
+    max-height: var(--max-height, none);
+    min-width: var(--min-width, auto);
+    max-width: var(--max-width, none);
+    aspect-ratio: var(--aspect-ratio, auto);
+  }
+  
+  /* Grid Display */
+  .custom-grid.grid {
+    display: grid;
+    grid-template-columns: var(--grid-template-columns);
+    grid-template-rows: var(--grid-template-rows);
+    grid-auto-flow: var(--grid-auto-flow);
+    grid-auto-rows: var(--grid-auto-rows);
+    grid-auto-columns: var(--grid-auto-columns);
+    /* Gap properties are now applied via inline styles for immediate effect */
+  }
+  
+  /* Flexbox Display */
+  .custom-grid.flex {
+    display: flex;
+  }
+  
+  /* Responsive Grid Columns */
+  .custom-grid.sm\:custom-grid-cols { grid-template-columns: 1fr; }
+  .custom-grid.md\:custom-grid-cols { grid-template-columns: repeat(2, 1fr); }
+  .custom-grid.lg\:custom-grid-cols { grid-template-columns: repeat(3, 1fr); }
+  .custom-grid.xl\:custom-grid-cols { grid-template-columns: repeat(4, 1fr); }
+  
+  /* Animation */
+  .animate-custom-grid > * {
+    animation: fadeInScale 0.6s var(--animation-easing) forwards;
+    animation-delay: var(--animation-delay);
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  
+  @keyframes fadeInScale {
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  /* Responsive Utilities */
+  .custom-grid :global(.grid-cols-1) { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .custom-grid :global(.grid-cols-2) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .custom-grid :global(.grid-cols-3) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .custom-grid :global(.grid-cols-4) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .custom-grid :global(.grid-cols-5) { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .custom-grid :global(.grid-cols-6) { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .custom-grid :global(.grid-cols-12) { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  
+  /* Auto-fit and Auto-fill */
+  .custom-grid :global(.grid-cols-auto-fit) { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .custom-grid :global(.grid-cols-auto-fill) { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+  
+  /* Gap Utilities */
+  .custom-grid :global(.gap-0) { gap: 0; }
+  .custom-grid :global(.gap-1) { gap: 0.25rem; }
+  .custom-grid :global(.gap-2) { gap: 0.5rem; }
+  .custom-grid :global(.gap-4) { gap: 1rem; }
+  .custom-grid :global(.gap-6) { gap: 1.5rem; }
+  .custom-grid :global(.gap-8) { gap: 2rem; }
+  .custom-grid :global(.gap-10) { gap: 2.5rem; }
+  .custom-grid :global(.gap-12) { gap: 3rem; }
+  
+  /* Responsive Design */
+  @media (max-width: 640px) {
+    .custom-grid {
+      grid-template-columns: 1fr !important;
+      gap: var(--spacing-md);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .custom-grid.flex {
+      flex-direction: column;
+    }
+  }
+  
+  /* Advanced Grid Features */
+  .custom-grid :global(.span-2) { grid-column: span 2; }
+  .custom-grid :global(.span-3) { grid-column: span 3; }
+  .custom-grid :global(.span-full) { grid-column: 1 / -1; }
+  
+  .custom-grid :global(.row-span-2) { grid-row: span 2; }
+  .custom-grid :global(.row-span-3) { grid-row: span 3; }
+  
+  /* Masonry-like behavior */
+  .custom-grid :global(.masonry) {
+    grid-auto-rows: 0;
+    grid-template-rows: masonry;
+  }
+  
+  /* Sticky positioning */
+  .custom-grid :global(.sticky) {
+    position: sticky;
+    top: 0;
+  }
+  
+  /* Aspect ratio containers */
+  .custom-grid :global(.aspect-square) { aspect-ratio: 1; }
+  .custom-grid :global(.aspect-video) { aspect-ratio: 16 / 9; }
+  .custom-grid :global(.aspect-photo) { aspect-ratio: 4 / 3; }
+</style>

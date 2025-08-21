@@ -1,0 +1,391 @@
+---
+// src/pages/advanced-demo.astro
+// Advanced Section Component Demo - Showcasing all variants
+
+import Section from "@/components/Section/Section.astro";
+---
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Advanced Section Component Demo</title>
+  <style>
+    body { 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+      margin: 0; 
+      padding: 20px; 
+      background: #f8fafc;
+      line-height: 1.6;
+    }
+    .demo-section { 
+      margin-bottom: 60px; 
+      border: 2px solid #e2e8f0; 
+      padding: 30px; 
+      background: white; 
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .variant-title { 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .code-example {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 14px;
+      margin: 20px 0;
+      overflow-x: auto;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .feature-card {
+      background: #f1f5f9;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #3b82f6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mx-auto max-w-7xl">
+    <header class="text-center mb-16">
+      <h1 class="text-5xl font-bold text-gray-900 mb-6">🚀 Advanced Section Component</h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        A powerful, flexible component system that can handle any layout complexity. 
+        From simple sections to advanced interactive layouts.
+      </p>
+    </header>
+
+    <!-- Masonry Variant Demo -->
+    <div class="demo-section">
+      <div class="variant-title">
+        <h2 class="text-3xl font-bold">🎨 Masonry Layout</h2>
+        <p class="mt-2 opacity-90">Dynamic grid with varying heights and responsive columns</p>
+      </div>
+      
+      <Section variant="masonry" variantProps={{
+        columns: { xs: 1, sm: 2, md: 3, lg: 4 },
+        gap: "gap-6",
+        animation: true
+      }}>
+        <div slot="items">
+          <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200" style="height: 200px;">
+            <h3 class="text-xl font-semibold text-blue-800">Card 1</h3>
+            <p class="text-blue-700">Short content</p>
+          </div>
+          <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200" style="height: 300px;">
+            <h3 class="text-xl font-semibold text-green-800">Card 2</h3>
+            <p class="text-green-700">Medium content with more text to demonstrate varying heights</p>
+          </div>
+          <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200" style="height: 250px;">
+            <h3 class="text-xl font-semibold text-purple-800">Card 3</h3>
+            <p class="text-purple-700">Medium content</p>
+          </div>
+          <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-lg border border-orange-200" style="height: 180px;">
+            <h3 class="text-xl font-semibold text-orange-800">Card 4</h3>
+            <p class="text-orange-700">Short content</p>
+          </div>
+          <div class="bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-lg border border-red-200" style="height: 320px;">
+            <h3 class="text-xl font-semibold text-red-800">Card 5</h3>
+            <p class="text-red-700">Long content with lots of text to show how masonry handles different heights naturally</p>
+          </div>
+          <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 rounded-lg border border-indigo-200" style="height: 220px;">
+            <h3 class="text-xl font-semibold text-indigo-800">Card 6</h3>
+            <p class="text-indigo-700">Medium content</p>
+          </div>
+        </div>
+      </Section>
+
+      <div class="code-example">
+{`<Section variant="masonry" variantProps={{
+  columns: { xs: 1, sm: 2, md: 3, lg: 4 },
+  gap: "gap-6",
+  animation: true
+}}>
+  <div slot="items">
+    <!-- Dynamic height cards -->
+  </div>
+</Section>`}
+      </div>
+    </div>
+
+    <!-- Sidebar Variant Demo -->
+    <div class="demo-section">
+      <div class="variant-title">
+        <h2 class="text-3xl font-bold">📱 Sidebar Layout</h2>
+        <p class="mt-2 opacity-90">Flexible sidebar with responsive behavior and sticky positioning</p>
+      </div>
+      
+      <Section variant="sidebar" variantProps={{
+        sidebarPosition: 'left',
+        sidebarWidth: '280px',
+        sidebarSticky: true,
+        sidebarBackground: 'bg-gray-50',
+        responsive: 'stack'
+      }}>
+        <div slot="sidebar">
+          <h3 class="text-xl font-bold text-gray-800 mb-4">Navigation</h3>
+          <nav class="space-y-2">
+            <a href="#" class="block p-3 rounded-lg bg-blue-100 text-blue-800 font-medium">Dashboard</a>
+            <a href="#" class="block p-3 rounded-lg hover:bg-gray-100 text-gray-700">Projects</a>
+            <a href="#" class="block p-3 rounded-lg hover:bg-gray-100 text-gray-700">Team</a>
+            <a href="#" class="block p-3 rounded-lg hover:bg-gray-100 text-gray-700">Settings</a>
+          </nav>
+        </div>
+        <div slot="content">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Main Content Area</h2>
+          <p class="text-gray-600 mb-4">This is the main content area that takes up the remaining space. The sidebar is sticky and will stay in place as you scroll.</p>
+          <div class="bg-blue-50 p-4 rounded-lg">
+            <p class="text-blue-800">The sidebar automatically stacks on mobile devices for better usability.</p>
+          </div>
+        </div>
+      </Section>
+
+      <div class="code-example">
+{`<Section variant="sidebar" variantProps={{
+  sidebarPosition: 'left',
+  sidebarWidth: '280px',
+  sidebarSticky: true,
+  responsive: 'stack'
+}}>
+  <div slot="sidebar">Navigation</div>
+  <div slot="content">Main content</div>
+</Section>`}
+      </div>
+    </div>
+
+    <!-- Tabs Variant Demo -->
+    <div class="demo-section">
+      <div class="variant-title">
+        <h2 class="text-3xl font-bold">📑 Interactive Tabs</h2>
+        <p class="mt-2 opacity-90">Multiple tab styles with smooth animations and responsive design</p>
+      </div>
+      
+      <Section variant="tabs" variantProps={{
+        tabStyle: 'pills',
+        fullWidth: true,
+        animation: true
+      }}>
+        <div slot="tabs">
+          <button data-tab="0" class="active">Overview</button>
+          <button data-tab="1">Features</button>
+          <button data-tab="2">Pricing</button>
+          <button data-tab="3">Support</button>
+        </div>
+        <div slot="content">
+          <div data-tab-content="0" class="active">
+            <h3 class="text-xl font-semibold mb-3">Overview</h3>
+            <p>Get a comprehensive overview of our platform and its capabilities.</p>
+          </div>
+          <div data-tab-content="1">
+            <h3 class="text-xl font-semibold mb-3">Features</h3>
+            <p>Explore all the powerful features that make our platform stand out.</p>
+          </div>
+          <div data-tab-content="2">
+            <h3 class="text-xl font-semibold mb-3">Pricing</h3>
+            <p>Choose the perfect plan for your needs with transparent pricing.</p>
+          </div>
+          <div data-tab-content="3">
+            <h3 class="text-xl font-semibold mb-3">Support</h3>
+            <p>Get help when you need it with our comprehensive support system.</p>
+          </div>
+        </div>
+      </Section>
+
+      <div class="code-example">
+{`<Section variant="tabs" variantProps={{
+  tabStyle: 'pills',
+  fullWidth: true,
+  animation: true
+}}>
+  <div slot="tabs">
+    <button data-tab="0">Tab 1</button>
+    <button data-tab="1">Tab 2</button>
+  </div>
+  <div slot="content">
+    <div data-tab-content="0">Content 1</div>
+    <div data-tab-content="1">Content 2</div>
+  </div>
+</Section>`}
+      </div>
+    </div>
+
+    <!-- Accordion Variant Demo -->
+    <div class="demo-section">
+      <div class="variant-title">
+        <h2 class="text-3xl font-bold">📋 Collapsible Accordion</h2>
+        <p class="mt-2 opacity-90">Multiple styles with single or multiple open behavior</p>
+      </div>
+      
+      <Section variant="accordion" variantProps={{
+        style: 'cards',
+        behavior: 'single',
+        spacing: 'md',
+        animation: true
+      }}>
+        <div slot="items">
+          <div class="accordion-item">
+            <div class="accordion-header">
+              <h3 class="accordion-title">What is the Section Component?</h3>
+              <div class="accordion-icon chevron"></div>
+            </div>
+            <div class="accordion-content">
+              <p>The Section Component is a powerful, flexible system that can handle any layout complexity. It provides multiple variants for different use cases.</p>
+            </div>
+          </div>
+          
+          <div class="accordion-item">
+            <div class="accordion-header">
+              <h3 class="accordion-title">How many variants are available?</h3>
+              <div class="accordion-icon chevron"></div>
+            </div>
+            <div class="accordion-content">
+              <p>Currently, there are 10 variants: Hero, TwoCol, CardGrid, Centered, Simple, Masonry, Sidebar, Tabs, Accordion, and CustomGrid.</p>
+            </div>
+          </div>
+          
+          <div class="accordion-item">
+            <div class="accordion-header">
+              <h3 class="accordion-title">Is it responsive?</h3>
+              <div class="accordion-icon chevron"></div>
+            </div>
+            <div class="accordion-content">
+              <p>Yes! All variants are fully responsive and adapt beautifully to different screen sizes and devices.</p>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <div class="code-example">
+{`<Section variant="accordion" variantProps={{
+  style: 'cards',
+  behavior: 'single',
+  animation: true
+}}>
+  <div slot="items">
+    <div class="accordion-item">
+      <div class="accordion-header">
+        <h3 class="accordion-title">Title</h3>
+        <div class="accordion-icon chevron"></div>
+      </div>
+      <div class="accordion-content">Content</div>
+    </div>
+  </div>
+</Section>`}
+      </div>
+    </div>
+
+    <!-- Custom Grid Variant Demo -->
+    <div class="demo-section">
+      <div class="variant-title">
+        <h2 class="text-3xl font-bold">🔧 Custom Grid System</h2>
+        <p class="mt-2 opacity-90">Maximum flexibility with CSS Grid and Flexbox controls</p>
+      </div>
+      
+      <Section variant="customGrid" variantProps={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+        gap: '2rem',
+        alignItems: 'stretch',
+        animation: true,
+        responsive: {
+          sm: { gridTemplateColumns: '1fr' },
+          md: { gridTemplateColumns: 'repeat(2, 1fr)' },
+          lg: { gridTemplateColumns: 'repeat(3, 1fr)' }
+        }
+      }}>
+        <div slot="items">
+          <div class="bg-gradient-to-br from-pink-50 to-pink-100 p-6 rounded-lg border border-pink-200">
+            <h3 class="text-lg font-semibold text-pink-800">Grid Item 1</h3>
+            <p class="text-pink-700">Auto-sizing grid with responsive breakpoints</p>
+          </div>
+          <div class="bg-gradient-to-br from-teal-50 to-teal-100 p-6 rounded-lg border border-teal-200">
+            <h3 class="text-lg font-semibold text-teal-800">Grid Item 2</h3>
+            <p class="text-teal-700">Customizable spacing and alignment</p>
+          </div>
+          <div class="bg-gradient-to-br from-amber-50 to-amber-100 p-6 rounded-lg border border-amber-200">
+            <h3 class="text-lg font-semibold text-amber-800">Grid Item 3</h3>
+            <p class="text-amber-700">Advanced CSS Grid features</p>
+          </div>
+          <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 p-6 rounded-lg border border-emerald-200">
+            <h3 class="text-lg font-semibold text-emerald-800">Grid Item 4</h3>
+            <p class="text-emerald-700">Flexible and powerful</p>
+          </div>
+        </div>
+      </Section>
+
+      <div class="code-example">
+{`<Section variant="customGrid" variantProps={{
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+  gap: '2rem',
+  responsive: {
+    sm: { gridTemplateColumns: '1fr' },
+    lg: { gridTemplateColumns: 'repeat(3, 1fr)' }
+  }
+}}>
+  <div slot="items">
+    <!-- Grid items -->
+  </div>
+</Section>`}
+      </div>
+    </div>
+
+    <!-- Features Overview -->
+    <div class="demo-section">
+      <div class="variant-title">
+        <h2 class="text-3xl font-bold">✨ Key Features</h2>
+        <p class="mt-2 opacity-90">What makes this component system powerful</p>
+      </div>
+      
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">🎯 10 Variants</h3>
+          <p class="text-gray-600">From simple layouts to complex interactive components</p>
+        </div>
+        
+        <div class="feature-card">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">🔌 Flexible Slots</h3>
+          <p class="text-gray-600">Named slots for precise content placement</p>
+        </div>
+        
+        <div class="feature-card">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">📱 Responsive</h3>
+          <p class="text-gray-600">Mobile-first design with breakpoint controls</p>
+        </div>
+        
+        <div class="feature-card">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">🎨 Customizable</h3>
+          <p class="text-gray-600">Extensive props for styling and behavior</p>
+        </div>
+        
+        <div class="feature-card">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">⚡ Performance</h3>
+          <p class="text-gray-600">Optimized rendering and minimal bundle size</p>
+        </div>
+        
+        <div class="feature-card">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">🛠️ Developer Experience</h3>
+          <p class="text-gray-600">TypeScript support and clear documentation</p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="text-center py-12 text-gray-500">
+      <p>🚀 Advanced Section Component - Ready for any layout challenge!</p>
+    </footer>
+  </div>
+</body>
+</html>

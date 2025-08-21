@@ -8,10 +8,22 @@ import { capitalize } from "@/utils/ContentUtils";
 
 // 1) Static paths
 export async function getStaticPaths() {
-  const names = Object.keys(collections);
-  const paths = [];
+  try {
+    // Ensure collections is defined and has keys
+    if (!collections || typeof collections !== 'object') {
+      console.warn('Collections is not properly loaded, using fallback paths');
+      return [];
+    }
 
-for (const coll of names) {
+    const names = Object.keys(collections);
+    if (!names || names.length === 0) {
+      console.warn('No collections found, using fallback paths');
+      return [];
+    }
+
+    const paths = [];
+
+    for (const coll of names) {
       let meta;
       try {
         meta = getCollectionMeta(coll);
@@ -26,14 +38,24 @@ for (const coll of names) {
     }
 
     return paths;
+  } catch (error) {
+    console.error('Error in getStaticPaths:', error);
+    return [];
   }
+}
 
-// 2) Load this collection’s meta
+// 2) Load this collection's meta
 const { collection } = Astro.params;
-let meta;
+let meta: any = {};
+
 try {
-  meta = getCollectionMeta(collection);
-} catch {
+  if (collection && collections && (collections as any)[collection]) {
+    meta = getCollectionMeta(collection);
+  } else {
+    console.warn(`Collection '${collection}' not found in collections config`);
+  }
+} catch (error) {
+  console.warn(`Failed to load meta for collection '${collection}':`, error);
   meta = {};
 }
 
@@ -49,9 +71,9 @@ try {
 // 4) Load the layout
 const spec = meta.layout || "../../layouts/ExtendedLayout.astro";
 const layoutMap = import.meta.glob("../../layouts/**/*.astro");
-const importer  = layoutMap[spec];
+const importer = layoutMap[spec];
 if (!importer) throw new Error(`Unknown layout: ${spec}`);
-const { default: Layout } = await importer();
+const { default: Layout } = await importer() as { default: any };
 
 // 5) Build fallback sections
 const sections = meta.sections?.length
@@ -78,14 +100,14 @@ const sections = meta.sections?.length
     <Body />
   ) : (
     <>
-      {sections.map((section, i) => (
+      {sections.map((section: any, i: number) => (
         <Section
           key={i}
           variant={section.variant}
+          variantProps={(section as any).variantProps || {}}
           collection={section.collection}
           query={section.query}
           heading={section.heading}
-          buttons={section.buttons}
           description={section.description}
           descriptionClass={section.descriptionClass}
           sectionClass={section.sectionClass}
@@ -94,6 +116,12 @@ const sections = meta.sections?.length
           itemClass={section.itemClass}
           buttonsSectionClass={section.buttonsSectionClass}
           headingAreaClass={section.headingAreaClass}
+          backgroundMedia={(section as any).backgroundMedia}
+          client={(section as any).client}
+          slider={(section as any).slider}
+          sortBy={(section as any).sortBy}
+          sortOrder={(section as any).sortOrder}
+          manualOrder={(section as any).manualOrder}
           {...section}
         />
       ))}

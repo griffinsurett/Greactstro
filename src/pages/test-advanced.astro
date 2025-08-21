@@ -1,0 +1,103 @@
+---
+// src/pages/test-advanced.astro
+// Simple test page for advanced variants
+
+import Section from "@/components/Section/Section.astro";
+---
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Advanced Variants Test</title>
+  <style>
+    body { 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+      margin: 0; 
+      padding: 20px; 
+      background: #f8fafc;
+    }
+    .test-section { 
+      margin-bottom: 40px; 
+      border: 1px solid #e2e8f0; 
+      padding: 20px; 
+      background: white; 
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mx-auto max-w-6xl">
+    <h1 class="text-4xl font-bold text-center mb-8">🧪 Advanced Variants Test</h1>
+    
+    <!-- Test Masonry -->
+    <div class="test-section">
+      <h2 class="text-2xl font-bold mb-4">Masonry Test</h2>
+      <Section variant="masonry" variantProps={{ columns: { xs: 1, sm: 2, md: 3 }, gap: "gap-4" }}>
+        <div slot="items">
+          <div class="bg-blue-100 p-4 rounded" style="height: 150px;">Item 1</div>
+          <div class="bg-green-100 p-4 rounded" style="height: 200px;">Item 2</div>
+          <div class="bg-purple-100 p-4 rounded" style="height: 180px;">Item 3</div>
+        </div>
+      </Section>
+    </div>
+
+    <!-- Test Tabs -->
+    <div class="test-section">
+      <h2 class="text-2xl font-bold mb-4">Tabs Test</h2>
+      <Section variant="tabs" variantProps={{ tabStyle: 'default' }}>
+        <div slot="tabs">
+          <button data-tab="0" class="active">Tab 1</button>
+          <button data-tab="1">Tab 2</button>
+        </div>
+        <div slot="content">
+          <div data-tab-content="0" class="active">
+            <p>Content for tab 1</p>
+          </div>
+          <div data-tab-content="1">
+            <p>Content for tab 2</p>
+          </div>
+        </div>
+      </Section>
+    </div>
+
+    <!-- Test Accordion -->
+    <div class="test-section">
+      <h2 class="text-2xl font-bold mb-4">Accordion Test</h2>
+      <Section variant="accordion" variantProps={{ style: 'default' }}>
+        <div slot="items">
+          <div class="accordion-item">
+            <div class="accordion-header">
+              <h3 class="accordion-title">Section 1</h3>
+              <div class="accordion-icon chevron"></div>
+            </div>
+            <div class="accordion-content">
+              <p>Content for section 1</p>
+            </div>
+          </div>
+        </div>
+      </Section>
+    </div>
+
+    <!-- Test Custom Grid -->
+    <div class="test-section">
+      <h2 class="text-2xl font-bold mb-4">Custom Grid Test</h2>
+      <Section variant="customGrid" variantProps={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+        gap: '1rem'
+      }}>
+        <div slot="items">
+          <div class="bg-red-100 p-4 rounded">Grid Item 1</div>
+          <div class="bg-yellow-100 p-4 rounded">Grid Item 2</div>
+          <div class="bg-pink-100 p-4 rounded">Grid Item 3</div>
+        </div>
+      </Section>
+    </div>
+
+    <div class="text-center py-8 text-gray-600">
+      <p>✅ All variants should render correctly above</p>
+    </div>
+  </div>
+</body>
+</html>

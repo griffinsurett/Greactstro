@@ -1,0 +1,74 @@
+---
+// src/components/Section/Variants/TwoCol.astro
+// Two Column variant component for the Section component
+// Usage: <Section variant="twoCol"><TwoCol /></Section>
+
+interface Props {
+  leftColumnClass?: string;
+  rightColumnClass?: string;
+  reverse?: boolean;
+  gap?: string;
+  alignItems?: string;
+  backgroundColor?: string;
+  textColor?: string;
+  sectionPadding?: string;
+}
+
+const {
+  leftColumnClass = "space-y-[var(--spacing-md)]",
+  rightColumnClass = "space-y-[var(--spacing-md)]",
+  reverse = false,
+  gap = "gap-[var(--spacing-xl)]",
+  alignItems = "items-center",
+  backgroundColor,
+  textColor,
+  sectionPadding = "py-[var(--spacing-xl)]"
+} = Astro.props;
+
+// Check if backgroundColor is a Tailwind class or CSS value
+const isTailwindClass = backgroundColor && backgroundColor.startsWith('bg-');
+const bgClass = isTailwindClass ? backgroundColor : '';
+const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundColor}` : '';
+const textStyle = textColor ? `color: ${textColor}` : '';
+---
+
+<div 
+  class={`two-col-variant grid md:grid-cols-2 ${gap} ${alignItems} ${reverse ? 'md:grid-flow-col-dense' : ''} ${bgClass} ${sectionPadding}`}
+  style={bgStyle}
+>
+  <!-- Left Column -->
+  <div class={`left-column ${leftColumnClass} ${reverse ? 'md:col-start-2' : ''}`} style={textColor ? `color: ${textColor}` : ''}>
+    <slot name="left">
+      <div class="space-y-[var(--spacing-md)]">
+        <h2 class="text-3xl font-bold" style={textColor ? `color: ${textColor}` : ''}>Left Column</h2>
+        <p class="text-lg" style={textColor ? `color: ${textColor}` : ''}>This is the left column content. Use the 'left' slot to customize.</p>
+      </div>
+    </slot>
+  </div>
+  
+  <!-- Right Column -->
+  <div class={`right-column ${rightColumnClass} ${reverse ? 'md:col-start-1' : ''}`} style={textColor ? `color: ${textColor}` : ''}>
+    <slot name="right">
+      <div class="space-y-[var(--spacing-md)]">
+        <h3 class="text-2xl font-semibold" style={textColor ? `color: ${textColor}` : ''}>Right Column</h3>
+        <p class="text-lg" style={textColor ? `color: ${textColor}` : ''}>This is the right column content. Use the 'right' slot to customize.</p>
+      </div>
+    </slot>
+  </div>
+  
+  <!-- Full Width Content -->
+  <slot />
+</div>
+
+<style>
+  .two-col-variant {
+    min-height: 400px;
+  }
+  
+  @media (max-width: 768px) {
+    .two-col-variant {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-lg);
+    }
+  }
+</style>

@@ -1,0 +1,159 @@
+---
+// src/components/Section/Variants/Masonry.astro
+// Advanced masonry grid layout with dynamic heights and responsive columns
+
+interface Props {
+  columns?: { xs?: number; sm?: number; md?: number; lg?: number; xl?: number };
+  gap?: string;
+  itemMinWidth?: string;
+  itemMaxWidth?: string;
+  alignItems?: string;
+  justifyItems?: string;
+  masonryGap?: string;
+  animation?: boolean;
+  backgroundColor?: string;
+  textColor?: string;
+  sectionPadding?: string;
+}
+
+const {
+  columns = { xs: 1, sm: 2, md: 3, lg: 4, xl: 5 },
+  gap = "gap-[var(--spacing-lg)]",
+  itemMinWidth = "min-w-[250px]",
+  itemMaxWidth = "max-w-[400px]",
+  alignItems = "items-start",
+  justifyItems = "justify-items-center",
+  masonryGap = "gap-[var(--spacing-md)]",
+  animation = true,
+  backgroundColor,
+  textColor,
+  sectionPadding = "py-[var(--spacing-xl)]"
+} = Astro.props;
+
+// Check if backgroundColor is a Tailwind class or CSS value
+const isTailwindClass = backgroundColor && backgroundColor.startsWith('bg-');
+const bgClass = isTailwindClass ? backgroundColor : '';
+const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundColor}` : '';
+const textStyle = textColor ? `color: ${textColor}` : '';
+
+// Generate responsive column classes using a mapping approach
+const getColumnClasses = (cols: any) => {
+  const baseCols = cols.xs || 1;
+  const smCols = cols.sm || cols.xs || 1;
+  const mdCols = cols.md || cols.sm || cols.xs || 1;
+  const lgCols = cols.lg || cols.md || cols.sm || cols.xs || 1;
+  const xlCols = cols.xl || cols.lg || cols.md || cols.sm || cols.xs || 1;
+  
+  // Map column numbers to Tailwind classes
+  const columnMap: { [key: number]: string } = {
+    1: 'grid-cols-1',
+    2: 'grid-cols-2',
+    3: 'grid-cols-3',
+    4: 'grid-cols-4',
+    5: 'grid-cols-5',
+    6: 'grid-cols-6',
+    7: 'grid-cols-7',
+    8: 'grid-cols-8',
+    9: 'grid-cols-9',
+    10: 'grid-cols-10',
+    11: 'grid-cols-11',
+    12: 'grid-cols-12'
+  };
+  
+  return [
+    columnMap[baseCols] || 'grid-cols-1',
+    `sm:${columnMap[smCols] || columnMap[baseCols] || 'grid-cols-1'}`,
+    `md:${columnMap[mdCols] || columnMap[smCols] || columnMap[baseCols] || 'grid-cols-1'}`,
+    `lg:${columnMap[lgCols] || columnMap[mdCols] || columnMap[smCols] || columnMap[baseCols] || 'grid-cols-1'}`,
+    `xl:${columnMap[xlCols] || columnMap[lgCols] || columnMap[mdCols] || columnMap[smCols] || columnMap[baseCols] || 'grid-cols-1'}`
+  ].join(' ');
+};
+
+const columnClasses = getColumnClasses(columns);
+---
+
+<div 
+  class={`masonry-grid ${columnClasses} ${gap} ${alignItems} ${justifyItems} ${animation ? 'animate-masonry' : ''} ${bgClass} ${sectionPadding}`}
+  style={bgStyle}
+>
+  <slot name="items" />
+  <slot />
+</div>
+
+<style>
+  .masonry-grid {
+    display: grid;
+    grid-auto-rows: auto;
+    align-items: start;
+    width: 100%;
+  }
+  
+  .masonry-grid > * {
+    break-inside: avoid;
+    margin-bottom: var(--spacing-md);
+    width: 100%;
+  }
+  
+  /* Ensure grid items respect the column layout */
+  .masonry-grid > * {
+    min-width: 0; /* Allow items to shrink below their content size */
+  }
+  
+  /* Fallback for browsers without grid support */
+  @supports not (display: grid) {
+    .masonry-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-md);
+    }
+    
+    .masonry-grid > * {
+      flex: 1 1 300px;
+      max-width: 400px;
+    }
+  }
+  
+  .animate-masonry > * {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  
+  .animate-masonry > *:nth-child(1) { animation-delay: 0.1s; }
+  .animate-masonry > *:nth-child(2) { animation-delay: 0.2s; }
+  .animate-masonry > *:nth-child(3) { animation-delay: 0.3s; }
+  .animate-masonry > *:nth-child(4) { animation-delay: 0.4s; }
+  .animate-masonry > *:nth-child(5) { animation-delay: 0.5s; }
+  
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .masonry-grid {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+  }
+  
+  @media (min-width: 641px) and (max-width: 768px) {
+    .masonry-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .masonry-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  
+  @media (min-width: 1025px) {
+    .masonry-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>

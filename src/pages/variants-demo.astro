@@ -1,0 +1,176 @@
+---
+// src/pages/variants-demo.astro
+// Demo page showcasing the new Section variants system
+import ExtendedLayout from "@/layouts/ExtendedLayout.astro";
+import Section from "@/components/Section/Section.astro";
+import { Hero, TwoCol, CardGrid, Centered } from "@/components/Section/Variants";
+---
+
+<ExtendedLayout 
+  title="Section Variants Demo" 
+  description="Demonstrating the new customizable Section component variants"
+>
+  <!-- Hero Variant -->
+  <Section variant="hero">
+    <Hero 
+      heading="Welcome to Our Hero Section"
+      description="This is a beautiful hero section with gradient background and customizable content"
+      buttons={[
+        { text: "Get Started", link: "/contact", variant: "primary" },
+        { text: "Learn More", link: "/about", variant: "secondary" }
+      ]}
+    />
+  </Section>
+
+  <!-- Two Column Variant -->
+  <Section variant="twoCol">
+    <TwoCol reverse={false}>
+      <div slot="left">
+        <h2 class="text-3xl font-bold text-[var(--color-text)] mb-[var(--spacing-md)]">
+          Left Column Content
+        </h2>
+        <p class="text-lg text-gray-600 mb-[var(--spacing-md)]">
+          This is the left column with custom content. You can put any HTML here including images, text, or other components.
+        </p>
+        <button class="bg-[var(--color-primary)] text-white px-[var(--spacing-md)] py-[var(--spacing-sm)] rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors">
+          Learn More
+        </button>
+      </div>
+      
+      <div slot="right">
+        <h3 class="text-2xl font-semibold text-[var(--color-text)] mb-[var(--spacing-md)]">
+          Right Column Content
+        </h3>
+        <p class="text-lg text-gray-600 mb-[var(--spacing-md)]">
+          The right column can contain different content like forms, images, or any other elements you need.
+        </p>
+        <div class="bg-gray-100 p-[var(--spacing-md)] rounded-lg">
+          <p class="text-sm text-gray-700">This is a highlighted content box</p>
+        </div>
+      </div>
+    </TwoCol>
+  </Section>
+
+  <!-- Card Grid Variant -->
+  <Section variant="cardGrid">
+    <CardGrid 
+      columns={{ sm: 1, md: 2, lg: 3 }}
+      showShadows={true}
+      hoverEffect={true}
+    >
+      <div slot="cards">
+        <div class="bg-white rounded-lg shadow-md p-[var(--spacing-md)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+          <h3 class="text-xl font-semibold text-[var(--color-text)] mb-[var(--spacing-sm)]">Custom Card 1</h3>
+          <p class="text-gray-600 mb-[var(--spacing-sm)]">This is a custom card with hover effects and shadows.</p>
+          <button class="text-[var(--color-primary)] hover:underline">Read More</button>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-[var(--spacing-md)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+          <h3 class="text-xl font-semibold text-[var(--color-text)] mb-[var(--spacing-sm)]">Custom Card 2</h3>
+          <p class="text-gray-600 mb-[var(--spacing-sm)]">Another custom card with different content and styling.</p>
+          <button class="text-[var(--color-primary)] hover:underline">Learn More</button>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-[var(--spacing-md)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+          <h3 class="text-xl font-semibold text-[var(--color-text)] mb-[var(--spacing-sm)]">Custom Card 3</h3>
+          <p class="text-gray-600 mb-[var(--spacing-sm)]">Third custom card demonstrating the grid layout.</p>
+          <button class="text-[var(--color-primary)] hover:underline">Explore</button>
+        </div>
+      </div>
+    </CardGrid>
+  </Section>
+
+  <!-- Centered Variant -->
+  <Section variant="centered">
+    <Centered maxWidth="max-w-3xl">
+      <h2 class="text-4xl font-bold text-[var(--color-text)] mb-[var(--spacing-md)]">
+        Centered Content Section
+      </h2>
+      <p class="text-xl text-gray-600 mb-[var(--spacing-lg)]">
+        This section demonstrates the centered variant with a maximum width and centered text alignment.
+        Perfect for testimonials, introductions, or any content that should be prominently displayed.
+      </p>
+      
+      <div slot="additional">
+        <div class="bg-gray-50 p-[var(--spacing-lg)] rounded-lg border border-gray-200">
+          <p class="text-lg text-gray-700 italic">
+            "This is an additional content area that can be used for quotes, highlights, or other important information."
+          </p>
+        </div>
+      </div>
+      
+      <div slot="footer">
+        <div class="flex justify-center space-x-[var(--spacing-md)] mt-[var(--spacing-lg)]">
+          <button class="bg-[var(--color-primary)] text-white px-[var(--spacing-lg)] py-[var(--spacing-md)] rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors">
+            Primary Action
+          </button>
+          <button class="bg-gray-200 text-gray-800 px-[var(--spacing-lg)] py-[var(--spacing-md)] rounded-lg hover:bg-gray-300 transition-colors">
+            Secondary Action
+          </button>
+        </div>
+      </div>
+    </Centered>
+  </Section>
+
+  <!-- Mixed Content Section (using default Section) -->
+  <Section 
+    collection="services" 
+    query="getAll"
+    heading={{ text: "Our Services", tagName: "h2" }}
+    description="Explore our comprehensive range of services"
+    variant="cardGrid"
+  />
+
+  <!-- Hero with Custom Background -->
+  <Section variant="hero">
+    <Hero 
+      heading="Custom Hero Section"
+      description="This hero section demonstrates custom styling and content"
+      backgroundImage="/src/assets/solar-house.webp"
+      overlayOpacity={30}
+      minHeight="60vh"
+    >
+      <div slot="additional">
+        <div class="mt-[var(--spacing-lg)] p-[var(--spacing-md)] bg-white bg-opacity-20 rounded-lg backdrop-blur-sm">
+          <p class="text-white text-lg">Additional content with custom styling</p>
+        </div>
+      </div>
+    </Hero>
+  </Section>
+
+  <!-- Two Column with Reversed Layout -->
+  <Section variant="twoCol">
+    <TwoCol reverse={true} gap="gap-[var(--spacing-2xl)]">
+      <div slot="left">
+        <h2 class="text-3xl font-bold text-[var(--color-text)] mb-[var(--spacing-md)]">
+          Reversed Layout
+        </h2>
+        <p class="text-lg text-gray-600">
+          This two-column layout has the right column content displayed first (on the left side),
+          demonstrating the reverse functionality.
+        </p>
+      </div>
+      
+      <div slot="right">
+        <h3 class="text-2xl font-semibold text-[var(--color-text)] mb-[var(--spacing-md)]">
+          Left Side Content
+        </h3>
+        <p class="text-lg text-gray-600">
+          Even though this content is in the "right" slot, it appears on the left side due to the reverse prop.
+        </p>
+      </div>
+    </TwoCol>
+  </Section>
+</ExtendedLayout>
+
+<style>
+  /* Custom styles for the demo page */
+  .demo-section {
+    margin-bottom: var(--spacing-2xl);
+  }
+  
+  /* Ensure proper spacing between sections */
+  section {
+    margin-bottom: 0;
+  }
+</style>

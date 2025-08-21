@@ -1,0 +1,252 @@
+---
+// src/components/Section/Variants/Tabs.astro
+// Advanced tabs component with multiple styles and responsive behavior
+
+interface Props {
+  orientation?: 'horizontal' | 'vertical';
+  tabStyle?: 'default' | 'pills' | 'underline' | 'cards';
+  activeTab?: number;
+  fullWidth?: boolean;
+  centered?: boolean;
+  responsive?: boolean;
+  animation?: boolean;
+  tabSize?: 'sm' | 'md' | 'lg';
+  backgroundColor?: string;
+  textColor?: string;
+  sectionPadding?: string;
+}
+
+const {
+  orientation = 'horizontal',
+  tabStyle = 'default',
+  activeTab = 0,
+  fullWidth = false,
+  centered = false,
+  responsive = true,
+  animation = true,
+  tabSize = 'md',
+  backgroundColor,
+  textColor,
+  sectionPadding = "py-[var(--spacing-xl)]"
+} = Astro.props;
+
+// Check if backgroundColor is a Tailwind class or CSS value
+const isTailwindClass = backgroundColor && backgroundColor.startsWith('bg-');
+const bgClass = isTailwindClass ? backgroundColor : '';
+const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundColor}` : '';
+const textStyle = textColor ? `color: ${textColor}` : '';
+
+// Generate unique ID for this tabs instance
+const tabsId = `tabs-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<div 
+  class={`tabs-container ${orientation === 'vertical' ? 'flex' : 'block'} ${bgClass} ${sectionPadding}`}
+  style={bgStyle}
+>
+  {/* Tab Navigation */}
+  <div class={`tabs-navigation ${orientation === 'vertical' ? 'flex-col mr-[var(--spacing-lg)]' : 'flex-row'} ${fullWidth ? 'w-full' : ''} ${centered ? 'justify-center' : ''}`}>
+    <slot name="tabs" />
+  </div>
+  
+  {/* Tab Content */}
+  <div class={`tabs-content ${orientation === 'vertical' ? 'flex-1' : 'w-full'} ${animation ? 'animate-tab-content' : ''}`}>
+    <slot name="content" />
+    <slot />
+  </div>
+</div>
+
+<style>
+  .tabs-container {
+    width: 100%;
+  }
+  
+  .tabs-navigation {
+    display: flex;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .tabs-navigation.vertical {
+    border-bottom: none;
+    border-right: 1px solid #e5e7eb;
+    margin-bottom: 0;
+    margin-right: var(--spacing-lg);
+    min-width: 200px;
+  }
+  
+  /* Tab Button Styles */
+  .tabs-navigation :global(button),
+  .tabs-navigation :global(a) {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 0;
+    white-space: nowrap;
+    font-weight: 500;
+    color: #6b7280;
+  }
+  
+  /* Default Tab Style */
+  .tabs-navigation :global(button.active),
+  .tabs-navigation :global(a.active) {
+    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-primary);
+  }
+  
+  /* Pills Tab Style */
+  .tabs-navigation.pills :global(button),
+  .tabs-navigation.pills :global(a) {
+    border-radius: 9999px;
+    margin: 0 var(--spacing-xs);
+  }
+  
+  .tabs-navigation.pills :global(button.active),
+  .tabs-navigation.pills :global(a.active) {
+    background: var(--color-primary);
+    color: white;
+    border-bottom: none;
+  }
+  
+  /* Underline Tab Style */
+  .tabs-navigation.underline :global(button.active),
+  .tabs-navigation.underline :global(a.active) {
+    border-bottom: 3px solid var(--color-primary);
+    color: var(--color-primary);
+  }
+  
+  /* Cards Tab Style */
+  .tabs-navigation.cards :global(button),
+  .tabs-navigation.cards :global(a) {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin: 0 var(--spacing-xs);
+    background: white;
+  }
+  
+  .tabs-navigation.cards :global(button.active),
+  .tabs-navigation.cards :global(a.active) {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: white;
+  }
+  
+  /* Tab Sizes */
+  .tabs-navigation.sm :global(button),
+  .tabs-navigation.sm :global(a) {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.875rem;
+  }
+  
+  .tabs-navigation.lg :global(button),
+  .tabs-navigation.lg :global(a) {
+    padding: var(--spacing-lg) var(--spacing-xl);
+    font-size: 1.125rem;
+  }
+  
+  /* Hover Effects */
+  .tabs-navigation :global(button:hover),
+  .tabs-navigation :global(a:hover) {
+    color: var(--color-primary);
+    background: rgba(59, 130, 246, 0.05);
+  }
+  
+  /* Tab Content Animation */
+  .animate-tab-content {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .tabs-navigation {
+      flex-wrap: wrap;
+      gap: var(--spacing-xs);
+    }
+    
+    .tabs-navigation.vertical {
+      flex-direction: row;
+      border-right: none;
+      border-bottom: 1px solid #e5e7eb;
+      margin-right: 0;
+      margin-bottom: var(--spacing-lg);
+      min-width: auto;
+    }
+    
+    .tabs-navigation :global(button),
+    .tabs-navigation :global(a) {
+      flex: 1;
+      text-align: center;
+      min-width: 0;
+    }
+  }
+  
+  /* Full Width Tabs */
+  .tabs-navigation.full-width :global(button),
+  .tabs-navigation.full-width :global(a) {
+    flex: 1;
+    text-align: center;
+  }
+</style>
+
+<script>
+  // Client-side tab functionality
+  class TabsManager {
+    constructor(container) {
+      this.container = container;
+      this.tabButtons = container.querySelectorAll('[data-tab]');
+      this.tabContents = container.querySelectorAll('[data-tab-content]');
+      this.activeTab = 0;
+      
+      this.init();
+    }
+    
+    init() {
+      this.tabButtons.forEach((button, index) => {
+        button.addEventListener('click', () => this.switchTab(index));
+        if (index === 0) {
+          button.classList.add('active');
+        }
+      });
+      
+      this.tabContents.forEach((content, index) => {
+        if (index === 0) {
+          content.style.display = 'block';
+        } else {
+          content.style.display = 'none';
+        }
+      });
+    }
+    
+    switchTab(index) {
+      // Remove active class from all tabs
+      this.tabButtons.forEach(btn => btn.classList.remove('active'));
+      this.tabContents.forEach(content => content.style.display = 'none');
+      
+      // Add active class to selected tab
+      this.tabButtons[index].classList.add('active');
+      this.tabContents[index].style.display = 'block';
+      
+      this.activeTab = index;
+    }
+  }
+  
+  // Initialize tabs when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.tabs-container').forEach(container => {
+      new TabsManager(container);
+    });
+  });
+</script>

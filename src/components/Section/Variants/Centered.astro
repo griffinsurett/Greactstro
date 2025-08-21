@@ -1,0 +1,57 @@
+---
+// src/components/Section/Variants/Centered.astro
+// Centered variant component for the Section component
+// Usage: <Section variant="centered"><Centered /></Section>
+
+interface Props {
+  maxWidth?: string;
+  textAlign?: string;
+  spacing?: string;
+  padding?: string;
+  backgroundColor?: string;
+  textColor?: string;
+  sectionPadding?: string;
+}
+
+const {
+  maxWidth = "max-w-4xl",
+  textAlign = "text-center",
+  spacing = "space-y-[var(--spacing-xl)]",
+  padding = "py-[var(--spacing-xl)]",
+  backgroundColor,
+  textColor,
+  sectionPadding = "py-[var(--spacing-xl)]"
+} = Astro.props;
+
+// Check if backgroundColor is a Tailwind class or CSS value
+const isTailwindClass = backgroundColor && backgroundColor.startsWith('bg-');
+const bgClass = isTailwindClass ? backgroundColor : '';
+const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundColor}` : '';
+const textStyle = textColor ? `color: ${textColor}` : '';
+---
+
+<div 
+  class={`centered-variant ${maxWidth} mx-auto ${textAlign} ${spacing} ${padding} ${bgClass} ${sectionPadding}`}
+  style={`${bgStyle}${textStyle}`}
+>
+  <!-- Main Content -->
+  <slot />
+  
+  <!-- Additional Content -->
+  <slot name="additional" />
+  
+  <!-- Footer Content -->
+  <slot name="footer" />
+</div>
+
+<style>
+  .centered-variant {
+    min-height: 200px;
+  }
+  
+  @media (max-width: 768px) {
+    .centered-variant {
+      padding: var(--spacing-lg);
+    }
+  }
+</style>

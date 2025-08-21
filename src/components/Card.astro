@@ -1,0 +1,138 @@
+---
+interface Props {
+  icon?: string;
+  category?: string;
+  title: string;
+  description: string;
+  variant?: 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'error' | 'info';
+  size?: 'sm' | 'md' | 'lg';
+  hoverEffect?: boolean;
+  className?: string;
+  href?: string;
+  onClick?: () => void;
+}
+
+const { 
+  icon, 
+  category, 
+  title, 
+  description, 
+  variant = 'default',
+  size = 'md',
+  hoverEffect = true,
+  className = '',
+  href,
+  onClick
+} = Astro.props;
+
+// Variant color mapping
+const variantColors = {
+  default: { icon: 'gray', badge: 'gray' },
+  primary: { icon: 'blue', badge: 'blue' },
+  secondary: { icon: 'purple', badge: 'purple' },
+  accent: { icon: 'green', badge: 'green' },
+  success: { icon: 'emerald', badge: 'emerald' },
+  warning: { icon: 'orange', badge: 'orange' },
+  error: { icon: 'red', badge: 'red' },
+  info: { icon: 'indigo', badge: 'indigo' }
+};
+
+// Size mapping
+const sizeMap = {
+  sm: { padding: 'p-4', title: 'text-base', description: 'text-sm', icon: 'w-8 h-8', badge: 'text-xs px-2 py-1' },
+  md: { padding: 'p-6', title: 'text-lg', description: 'text-sm', icon: 'w-10 h-10', badge: 'text-xs px-2 py-1' },
+  lg: { padding: 'p-8', title: 'text-xl', description: 'text-base', icon: 'w-12 h-12', badge: 'text-sm px-3 py-1' }
+};
+
+const selectedVariant = variantColors[variant];
+const selectedSize = sizeMap[size];
+
+// Default icon if none provided
+const defaultIcon = icon || `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>`;
+
+// Base card classes
+const baseClasses = `bg-white rounded-xl border border-gray-200 shadow-sm transition-all duration-300 ${selectedSize.padding} ${className}`;
+const hoverClasses = hoverEffect ? 'hover:shadow-md hover:-translate-y-1' : '';
+
+const cardClasses = `${baseClasses} ${hoverClasses}`;
+
+// Icon background and text colors
+const iconBgColor = `bg-${selectedVariant.icon}-100`;
+const iconTextColor = `text-${selectedVariant.icon}-600`;
+const badgeBgColor = `bg-${selectedVariant.badge}-100`;
+const badgeTextColor = `text-${selectedVariant.badge}-600`;
+
+const isLink = !!href;
+const isButton = !!onClick;
+---
+
+{isLink ? (
+  <a href={href} class={cardClasses}>
+    <div class="flex items-center justify-between mb-4">
+      <div class={`${selectedSize.icon} ${iconBgColor} rounded-lg flex items-center justify-center`}>
+        <svg class={`w-5 h-5 ${iconTextColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" set:html={defaultIcon} />
+      </div>
+      {category && (
+        <span class={`${selectedSize.badge} font-medium ${badgeTextColor} ${badgeBgColor} px-2 py-1 rounded-full`}>
+          {category}
+        </span>
+      )}
+    </div>
+    <h3 class={`${selectedSize.title} font-semibold text-gray-900 mb-2`}>{title}</h3>
+    <p class={`${selectedSize.description} text-gray-600 leading-relaxed`}>{description}</p>
+  </a>
+) : isButton ? (
+  <button type="button" class={cardClasses} role="button" tabindex="0">
+    <div class="flex items-center justify-between mb-4">
+      <div class={`${selectedSize.icon} ${iconBgColor} rounded-lg flex items-center justify-center`}>
+        <svg class={`w-5 h-5 ${iconTextColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" set:html={defaultIcon} />
+      </div>
+      {category && (
+        <span class={`${selectedSize.badge} font-medium ${badgeTextColor} ${badgeBgColor} px-2 py-1 rounded-full`}>
+          {category}
+        </span>
+      )}
+    </div>
+    <h3 class={`${selectedSize.title} font-semibold text-gray-900 mb-2`}>{title}</h3>
+    <p class={`${selectedSize.description} text-gray-600 leading-relaxed`}>{description}</p>
+  </button>
+) : (
+  <div class={cardClasses}>
+    <div class="flex items-center justify-between mb-4">
+      <div class={`${selectedSize.icon} ${iconBgColor} rounded-lg flex items-center justify-center`}>
+        <svg class={`w-5 h-5 ${iconTextColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" set:html={defaultIcon} />
+      </div>
+      {category && (
+        <span class={`${selectedSize.badge} font-medium ${badgeTextColor} ${badgeBgColor} px-2 py-1 rounded-full`}>
+          {category}
+        </span>
+      )}
+    </div>
+    <h3 class={`${selectedSize.title} font-semibold text-gray-900 mb-2`}>{title}</h3>
+    <p class={`${selectedSize.description} text-gray-600 leading-relaxed`}>{description}</p>
+  </div>
+)}
+
+<style>
+  /* Focus states for accessibility */
+  button:focus-visible,
+  a:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  
+  /* Smooth transitions */
+  .transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Hover effects */
+  .hover\:shadow-md:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .hover\:-translate-y-1:hover {
+    transform: translateY(-0.25rem);
+  }
+</style>

@@ -9,96 +9,166 @@ import MobileMenuItem from "@/components/Menu/HamburgerMenu/MenuItem.jsx";
 const breakpoint = "lg";
 ---
 
-<header class="flex justify-between items-center p-[var(--spacing-md)] bg-bg">
-  <!-- Logo / site identity -->
-  <a href="/" class="flex items-center">
-    <Image
-      src={SiteData.logo.src}
-      alt={`${SiteData.title} logo`}
-      class="h-10 w-auto"
-      format="webp"
-      loading="eager"
-      fetchpriority="high"
-      aria-hidden="true"
-    />
-    <div class="ml-[var(--spacing-sm)]">
-      <div class="text-xl font-bold">{SiteData.title}</div>
-      <div class="text-sm text-text">{SiteData.tagline}</div>
+<header class="sticky top-0 z-50 flex items-center justify-between relative px-10 bg-white/80 backdrop-blur-sm border-b border-gray-100 shadow-sm">
+  
+  <!-- Content with clean layout -->
+  <div class="flex items-center justify-between w-full">
+    
+    <!-- Left: Logo and Brand -->
+    <div class="flex items-center">
+      <a href="/" class="flex items-center group">
+        <Image
+          src={SiteData.logo.src}
+          alt={`${SiteData.title} logo`}
+          class="h-28 w-auto transition-transform duration-300 group-hover:scale-105"
+          format="webp"
+          loading="eager"
+          fetchpriority="high"
+          aria-hidden="true"
+        />
+        <div class="ml-[var(--spacing-sm)]">
+          <div class="text-xl font-semibold text-gray-900 group-hover:text-[var(--color-primary)] transition-colors duration-300">{SiteData.title}</div>
+        </div>
+      </a>
     </div>
-  </a>
 
-  <Menu
-    collection="menuItems"
-    query="relatedItem:menus:mainMenu"
-    sortOrder="asc"
-    manualOrder={true}
-    responsive={true}
-    breakpoint={breakpoint}
-    hamburgerOnly={false}
+    <!-- Center: Navigation Menu -->
+    <div class="hidden lg:flex items-center space-x-8">
+      <Menu
+        collection="menuItems"
+        query="relatedItem:menus:mainMenu"
+        sortOrder="asc"
+        manualOrder={true}
+        responsive={false}
+        breakpoint={breakpoint}
+        hamburgerOnly={false}
 
-    desktop={{
-      itemsClass: "flex gap-[var(--spacing-md)]",
-      itemClass: "",
-      menuItem: {
-        // component: MenuItem,
-        props: {
-          itemClass: "px-2 py-1 text-primary hover:text-secondary",
-          linkClass:
-            "flex items-center space-x-[var(--spacing-xs)] font-bold transition-colors duration-200",
-          hierarchical: true,
-          submenu: {
-            component: Submenu,
-            itemsClass:
-              "submenu absolute left-0 top-full w-fit bg-gray-50 border border-gray-200 shadow-lg opacity-0 pointer-events-none transition-opacity duration-200 ease-in-out z-[100]",
-            subMenuItem: {
-              component: MenuItem,
-              props: {
-                itemClass:
-                  "px-4 py-2 hover:bg-gray-100 text-primary hover:text-secondary",
-                linkClass:
-                  "flex items-center space-x-[var(--spacing-xs)] font-medium transition-colors duration-200",
-                hierarchical: true,
-                subMenuItem: null,
+        desktop={{
+          itemsClass: "flex gap-8",
+          itemClass: "",
+          menuItem: {
+            // component: MenuItem,
+            props: {
+              itemClass: "px-2 py-1 text-gray-700 hover:text-[var(--color-primary)] font-medium transition-colors duration-200",
+              linkClass:
+                "flex items-center space-x-1 font-medium transition-colors duration-200",
+              hierarchical: true,
+              submenu: {
+                component: Submenu,
+                itemsClass:
+                  "submenu absolute left-0 top-full w-fit bg-white border border-gray-200 shadow-lg opacity-0 pointer-events-none transition-all duration-200 ease-in-out z-[100] rounded-lg py-2",
+                subMenuItem: {
+                  component: MenuItem,
+                  props: {
+                    itemClass:
+                      "px-4 py-2 hover:bg-gray-50 text-gray-700 hover:text-[var(--color-primary)] transition-colors duration-200",
+                    linkClass:
+                      "flex items-center space-x-1 font-medium transition-colors duration-200",
+                    hierarchical: true,
+                    subMenuItem: null,
+                  },
+                },
               },
             },
           },
-        },
-      },
-    }}
+        }}
+      />
+    </div>
 
-    mobile={{
-      itemsClass: "flex flex-col gap-[var(--spacing-md)]",
-      itemClass: "p-[var(--spacing-sm)]",
-      hamburgerTransform: true,
-      menuItem: {
-        component: MobileMenuItem,
-        props: {
-          itemClass:
-            "p-[var(--spacing-sm)] text-lg text-primary hover:text-secondary",
-          linkClass: "w-full text-left",
-          hierarchical: true,
-          submenu: {
-            component: MobileMenuItem,
-            itemsClass: "ml-4 border-l border-gray-200",
-            subMenuItem: {
+    <!-- Right: Get Started Button -->
+    <div class="flex items-center">
+      <a
+        href="/contact"
+        class="px-6 py-3 bg-[var(--color-primary)] text-white font-semibold rounded-full hover:bg-[var(--color-primary-dark)] transition-colors duration-200 shadow-sm hover:shadow-md"
+      >
+        Get Started
+      </a>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Toggle (Hamburger) -->
+  <div class="lg:hidden">
+    <Menu
+      collection="menuItems"
+      query="relatedItem:menus:mainMenu"
+      sortOrder="asc"
+      manualOrder={true}
+      responsive={true}
+      breakpoint={breakpoint}
+      hamburgerOnly={true}
+
+      mobile={{
+        itemsClass: "flex flex-col gap-[var(--spacing-md)]",
+        itemClass: "p-[var(--spacing-sm)]",
+        hamburgerTransform: true,
+        menuItem: {
+          component: MobileMenuItem,
+          props: {
+            itemClass:
+              "p-[var(--spacing-sm)] text-lg text-gray-700 hover:text-[var(--color-primary)] transition-colors duration-200",
+            linkClass: "w-full text-left",
+            hierarchical: true,
+            submenu: {
               component: MobileMenuItem,
-              props: {
-                itemClass: "p-[var(--spacing-sm)] text-base text-primary",
-                linkClass: "w-full text-left",
-                hierarchical: true,
-                subMenuItem: null,
+              itemsClass: "ml-4 border-l border-gray-200",
+              subMenuItem: {
+                component: MobileMenuItem,
+                props: {
+                  itemClass: "p-[var(--spacing-sm)] text-base text-gray-600",
+                  linkClass: "w-full text-left",
+                  hierarchical: true,
+                  subMenuItem: null,
+                },
               },
             },
           },
         },
-      },
-      shared: {
-        collection: "menuItems",
-        query: "relatedItem:menus:mainMenu",
-        sortOrder: "asc",
-        HasPage: true,
-      },
-      checkboxId: "hamburger-menu-toggle",
-    }}
-  />
+        shared: {
+          collection: "menuItems",
+          query: "relatedItem:menus:mainMenu",
+          sortOrder: "asc",
+          HasPage: true,
+        },
+        checkboxId: "hamburger-menu-toggle",
+      }}
+    />
+  </div>
 </header>
+
+<style>
+  /* Clean header styling */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* Enhanced backdrop blur for sticky effect */
+  header {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  
+  /* Smooth transitions for submenu */
+  .submenu {
+    transform: translateY(-8px);
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .submenu:hover,
+  .submenu:focus-within {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  
+  /* Enhanced shadows */
+  .shadow-sm {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+  
+  .shadow-md {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+</style>

@@ -1,0 +1,279 @@
+---
+// src/components/Section/Variants/Accordion.astro
+// Advanced accordion component with multiple styles and behaviors
+
+interface Props {
+  style?: 'default' | 'bordered' | 'cards' | 'minimal';
+  behavior?: 'single' | 'multiple';
+  animation?: boolean;
+  iconPosition?: 'left' | 'right';
+  iconStyle?: 'chevron' | 'plus' | 'arrow' | 'custom';
+  spacing?: 'sm' | 'md' | 'lg';
+  defaultOpen?: number[];
+  backgroundColor?: string;
+  textColor?: string;
+  sectionPadding?: string;
+}
+
+const {
+  style = 'default',
+  behavior = 'single',
+  animation = true,
+  iconPosition = 'right',
+  iconStyle = 'chevron',
+  spacing = 'md',
+  defaultOpen = [0],
+  backgroundColor,
+  textColor,
+  sectionPadding = "py-[var(--spacing-xl)]"
+} = Astro.props;
+
+// Check if backgroundColor is a Tailwind class or CSS value
+const isTailwindClass = backgroundColor && backgroundColor.startsWith('bg-');
+const bgClass = isTailwindClass ? backgroundColor : '';
+const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundColor}` : '';
+const textStyle = textColor ? `color: ${textColor}` : '';
+
+const accordionId = `accordion-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<div 
+  class={`accordion-container accordion-${style} accordion-${spacing} ${bgClass} ${sectionPadding}`} 
+  data-behavior={behavior}
+  style={bgStyle}
+>
+  <slot name="items" />
+  <slot />
+</div>
+
+<style>
+  .accordion-container {
+    width: 100%;
+  }
+  
+  /* Spacing Variants */
+  .accordion-sm :global(.accordion-item) {
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .accordion-md :global(.accordion-item) {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .accordion-lg :global(.accordion-item) {
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  /* Style Variants */
+  .accordion-default :global(.accordion-item) {
+    border-top: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .accordion-bordered :global(.accordion-item) {
+    border-bottom: 1px solid #e5e7eb;
+    border-radius: 0;
+  }
+  
+  .accordion-cards :global(.accordion-item) {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease;
+  }
+  
+  .accordion-cards :global(.accordion-item:hover) {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .accordion-minimal :global(.accordion-item) {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+  }
+  
+  /* Accordion Item Styles */
+  .accordion-container :global(.accordion-item) {
+    background: white;
+    transition: all 0.2s ease;
+  }
+  
+  .accordion-container :global(.accordion-header) {
+    padding: var(--spacing-lg);
+    cursor: pointer;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f9fafb;
+    transition: background-color 0.2s ease;
+  }
+  
+  .accordion-container :global(.accordion-header:hover) {
+    background: #f3f4f6;
+  }
+  
+  .accordion-container :global(.accordion-header.active) {
+    background: var(--color-primary);
+    color: white;
+  }
+  
+  .accordion-container :global(.accordion-title) {
+    font-weight: 600;
+    font-size: 1.125rem;
+    margin: 0;
+  }
+  
+  .accordion-container :global(.accordion-icon) {
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .accordion-container :global(.accordion-header.active .accordion-icon) {
+    transform: rotate(180deg);
+  }
+  
+  .accordion-container :global(.accordion-content) {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0 var(--spacing-lg);
+  }
+  
+  .accordion-container :global(.accordion-content.open) {
+    max-height: 1000px;
+    padding: var(--spacing-lg);
+  }
+  
+  /* Icon Styles */
+  .accordion-container :global(.accordion-icon.chevron)::after {
+    content: '⌄';
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+  
+  .accordion-container :global(.accordion-icon.plus)::after {
+    content: '+';
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1;
+  }
+  
+  .accordion-container :global(.accordion-icon.arrow)::after {
+    content: '→';
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+  
+  .accordion-container :global(.accordion-header.active .accordion-icon.plus)::after {
+    content: '−';
+  }
+  
+  .accordion-container :global(.accordion-header.active .accordion-icon.arrow)::after {
+    content: '↓';
+  }
+  
+  /* Animation */
+  .accordion-container :global(.accordion-content) {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .accordion-container :global(.accordion-header) {
+      padding: var(--spacing-md);
+    }
+    
+    .accordion-container :global(.accordion-content.open) {
+      padding: var(--spacing-md);
+    }
+    
+    .accordion-container :global(.accordion-title) {
+      font-size: 1rem;
+    }
+  }
+</style>
+
+<script>
+  class AccordionManager {
+    constructor(container) {
+      this.container = container;
+      this.behavior = container.dataset.behavior || 'single';
+      this.items = container.querySelectorAll('.accordion-item');
+      this.defaultOpen = [0]; // Default to first item open
+      
+      this.init();
+    }
+    
+    init() {
+      this.items.forEach((item, index) => {
+        const header = item.querySelector('.accordion-header');
+        const content = item.querySelector('.accordion-content');
+        const icon = item.querySelector('.accordion-icon');
+        
+        if (header && content) {
+          // Set initial state
+          if (this.defaultOpen.includes(index)) {
+            this.openItem(item, header, content, icon);
+          }
+          
+          // Add click handler
+          header.addEventListener('click', () => {
+            this.toggleItem(item, header, content, icon);
+          });
+        }
+      });
+    }
+    
+    toggleItem(item, header, content, icon) {
+      const isOpen = header.classList.contains('active');
+      
+      if (this.behavior === 'single') {
+        // Close all other items
+        this.items.forEach(otherItem => {
+          if (otherItem !== item) {
+            const otherHeader = otherItem.querySelector('.accordion-header');
+            const otherContent = otherItem.querySelector('.accordion-content');
+            const otherIcon = otherItem.querySelector('.accordion-icon');
+            
+            if (otherHeader && otherContent) {
+              this.closeItem(otherItem, otherHeader, otherContent, otherIcon);
+            }
+          }
+        });
+      }
+      
+      if (isOpen) {
+        this.closeItem(item, header, content, icon);
+      } else {
+        this.openItem(item, header, content, icon);
+      }
+    }
+    
+    openItem(item, header, content, icon) {
+      header.classList.add('active');
+      content.classList.add('open');
+      item.classList.add('open');
+    }
+    
+    closeItem(item, header, content, icon) {
+      header.classList.remove('active');
+      content.classList.remove('open');
+      item.classList.remove('open');
+    }
+  }
+  
+  // Initialize accordions when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.accordion-container').forEach(container => {
+      new AccordionManager(container);
+    });
+  });
+</script>

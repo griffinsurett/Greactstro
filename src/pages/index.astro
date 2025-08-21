@@ -2,48 +2,466 @@
 // src/pages/index.astro
 import ExtendedLayout from "@/layouts/ExtendedLayout.astro";
 import Section from "@/components/Section/Section.astro";
-import Card from "@/components/LoopComponents/Card";
+import TechCard from "@/components/TechCard.astro";
+import Card from "@/components/Card.astro";
 ---
-<ExtendedLayout title="Welcome to Greactstro!" description="Your gateway to amazing projects.">
-  <!-- Hero Section -->
-<Section
-  variant="primaryHero"
-  heading={{ before:"Welcome to ", text: "Greactstro", tagName: "h1" }}
-  description="Welcome to Greactstro!"
-  buttons={[
-    { text: "See Our CTA", link: "/contact-us", variant: "secondary" },
-    { text: "Learn More About Us", link: "/about-us" },
-  ]}
-/>
 
-  <!-- Services -->
-  <Section
-    collection="services"
-    query="getAll"
-  />
+<ExtendedLayout title="Welcome to Greactstro!" description="Your gateway to amazing projects and innovative solutions.">
+  
+  <!-- Enhanced Hero Section -->
+  <Section variant="hero" variantProps={{
+    heading: "Howdy, I'm Greactstro",
+    description: "Your gateway to amazing projects and innovative solutions.",
+    showBadge: false,
+    badgeText: "🚀 Trusted by 500+ companies worldwide",
+    showStats: false,
+    stats: [
+      { number: "500+", label: "Happy Clients" },
+      { number: "1000+", label: "Projects Delivered" },
+      { number: "24/7", label: "Support Available" }
+    ],
+    showScrollIndicator: false
+  }}>
+    <div slot="heading">
+      <h1 class="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 leading-tight animate-fade-in-up animation-delay-200">
+        <span class="bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent">
+          Build the Future
+        </span>
+        <br />
+        <span class="bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent">
+          With Greactstro
+        </span>
+      </h1>
+    </div>
+    <div slot="description">
+      <p class="text-xl sm:text-2xl lg:text-3xl mb-12 max-w-4xl mx-auto leading-relaxed opacity-90 animate-fade-in-up animation-delay-400">
+        We transform ideas into powerful digital experiences. From cutting-edge web applications to innovative mobile solutions, 
+        our team of experts delivers exceptional results that drive real business growth.
+      </p>
+    </div>
+    <div slot="buttons">
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 animate-fade-in-up animation-delay-600">
+        <a
+          href="/contact"
+          class="group relative px-8 py-4 rounded-2xl font-semibold text-lg bg-white text-[var(--color-primary)] hover:bg-gray-100 shadow-2xl hover:shadow-white/25 transition-all duration-500 transform hover:scale-105 hover:-translate-y-1"
+        >
+          <span class="relative z-10">🚀 Start Your Project</span>
+          <div class="absolute inset-0 bg-gradient-to-r from-white to-gray-100 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </a>
+        <a
+          href="/portfolio"
+          class="px-8 py-4 rounded-2xl font-semibold text-lg bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white hover:bg-white hover:text-[var(--color-primary)] hover:border-white shadow-2xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-1"
+        >
+          🎨 View Our Work
+        </a>
+      </div>
+    </div>
+  </Section>
 
-  <!-- Clients -->
-  <Section
-    sectionClass="animate-on-appear"
-    collection="clients"
-    query="getAll"
-    heading={{ text: "Our Clients", tagName: "h2" }}
-  />
+    <!-- Two Column Section - Why Choose Us -->
+  <Section variant="twoCol" variantProps={{ reverse: false, gap: "gap-[var(--spacing-2xl)]", sectionPadding: "p-[var(--spacing-2xl)]" }}>
+      <div slot="left">
+        <h2 class="text-3xl md:text-4xl font-bold text-[var(--color-text)] mb-[var(--spacing-md)]">
+          🎯 Why Choose Greactstro?
+        </h2>
+        <p class="text-lg text-[var(--color-text-light)] mb-[var(--spacing-md)] leading-relaxed">
+          We combine cutting-edge technology with creative design to deliver exceptional results. 
+          Our team of experts ensures every project exceeds expectations and drives real business value.
+        </p>
+        <div class="space-y-[var(--spacing-sm)]">
+          <div class="flex items-center space-x-[var(--spacing-sm)]">
+            <span class="text-[var(--color-success)] text-xl">✅</span>
+            <span>Innovative solutions that scale</span>
+          </div>
+          <div class="flex items-center space-x-[var(--spacing-sm)]">
+            <span class="text-[var(--color-success)] text-xl">✅</span>
+            <span>Expert team with proven track record</span>
+          </div>
+          <div class="flex items-center space-x-[var(--spacing-sm)]">
+            <span class="text-[var(--color-success)] text-xl">✅</span>
+            <span>24/7 support and maintenance</span>
+          </div>
+        </div>
+        <button class="mt-[var(--spacing-md)] bg-[var(--color-primary)] text-white px-[var(--spacing-lg)] py-[var(--spacing-md)] rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors shadow-lg hover:shadow-xl">
+          🚀 Start Your Project
+        </button>
+      </div>
+      
+      <div slot="right">
+        <h3 class="text-2xl font-semibold text-[var(--color-text)] mb-[var(--spacing-md)]">
+          🎨 Our Approach
+        </h3>
+        <p class="text-lg text-[var(--color-text-light)] mb-[var(--spacing-md)]">
+          We believe in collaboration, innovation, and delivering value. 
+          Every project is an opportunity to create something extraordinary.
+        </p>
+        <div class="bg-gradient-to-br from-[var(--color-primary)]/10 to-[var(--color-secondary)]/10 p-[var(--spacing-lg)] rounded-lg border border-[var(--color-primary)]/20">
+          <h4 class="font-semibold text-[var(--color-primary)] mb-[var(--spacing-sm)]">💡 Innovation Hub</h4>
+          <p class="text-sm text-[var(--color-text-light)]">We stay ahead of the curve with the latest technologies and design trends.</p>
+        </div>
+      </div>
+    </Section>
 
-  <!-- Projects -->
-  <Section
-    collection="projects"
-    query="getAll"
-    heading={{ text: "Our Projects", tagName: "h2" }}
-  />
+    <!-- Card Grid Section - Our Services -->
+    <Section variant="cardGrid" variantProps={{ columns: { sm: 1, md: 1, lg: 1 }, gap: "gap-[var(--spacing-xl)]", sectionPadding: "p-[var(--spacing-2xl)]" }}>
+      <div class="flex gap-10" slot="cards">
+        <div class="bg-white p-[var(--spacing-xl)] rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-[var(--color-border)] hover:border-[var(--color-primary)]/30">
+          <div class="text-4xl mb-[var(--spacing-md)]">🎨</div>
+          <h3 class="text-xl font-bold text-[var(--color-text)] mb-[var(--spacing-sm)]">Web Design</h3>
+          <p class="text-[var(--color-text-light)] mb-[var(--spacing-md)]">Beautiful, responsive websites that convert visitors into customers.</p>
+          <a href="/services/web-design" class="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] font-medium">Learn More →</a>
+        </div>
+        
+        <div class="bg-white p-[var(--spacing-xl)] rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-[var(--color-border)] hover:border-[var(--color-secondary)]/30">
+          <div class="text-4xl mb-[var(--spacing-md)]">📱</div>
+          <h3 class="text-xl font-bold text-[var(--color-text)] mb-[var(--spacing-sm)]">Mobile Apps</h3>
+          <p class="text-[var(--color-text-light)] mb-[var(--spacing-md)]">Native and cross-platform mobile applications for iOS and Android.</p>
+          <a href="/services/mobile-apps" class="text-[var(--color-secondary)] hover:text-[var(--color-secondary)]/80 font-medium">Learn More →</a>
+        </div>
+        
+        <div class="bg-white p-[var(--spacing-xl)] rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-[var(--color-border)] hover:border-[var(--color-accent)]/30">
+          <div class="text-4xl mb-[var(--spacing-md)]">⚡</div>
+          <h3 class="text-xl font-bold text-[var(--color-text)] mb-[var(--spacing-sm)]">Performance</h3>
+          <p class="text-[var(--color-text-light)] mb-[var(--spacing-md)]">Lightning-fast websites and apps that provide exceptional user experience.</p>
+          <a href="/services/performance" class="text-[var(--color-accent)] hover:text-[var(--color-success)] font-medium">Learn More →</a>
+        </div>
+      </div>
+    </Section>
 
-<!-- Testimonials -->
-<Section
-  collection="testimonials"
-  query="getAll"
-/>
+    <!-- Centered Section - Testimonials -->
+    <Section variant="centered" variantProps={{ maxWidth: "max-w-full", textAlign: "text-center", backgroundColor: "bg-gradient-to-r from-blue-500 to-purple-600",
+  textColor: "text-white", }}>
+      <div slot="additional">
+        <h2 class="text-3xl md:text-4xl font-bold text-[var(--color-neutral)] mb-[var(--spacing-md)]">
+          💬 What Our Clients Say
+        </h2>
+        <p class="text-lg text-[var(--color-neutral)] mb-[var(--spacing-lg)]">
+          Don't just take our word for it - hear from the amazing clients we've worked with.
+        </p>
+      </div>
+      
+      <div class="bg-gradient-to-r from-[var(--color-primary)]/5 to-[var(--color-secondary)]/5 p-[var(--spacing-xl)] rounded-xl border border-[var(--color-primary)]/20">
+        <div class="text-4xl mb-[var(--spacing-md)]">⭐</div>
+        <blockquote class="text-lg text-[var(--color-neutral)] italic mb-[var(--spacing-md)]">
+          "Greactstro transformed our business with their innovative web solution. The team was professional, creative, and delivered beyond our expectations."
+        </blockquote>
+        <div class="font-semibold text-[var(--color-neutral)]">Sarah Johnson</div>
+        <div class="text-sm text-[var(--color-neutral)]">CEO, TechCorp Solutions</div>
+      </div>
+      
+      <div slot="footer">
+        <div class="mt-[var(--spacing-lg)]">
+          <a href="/testimonials" class="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] bg-[var(--color-neutral)] px-4 py-2 rounded-md font-medium">
+            View All Testimonials →
+          </a>
+        </div>
+      </div>
+    </Section>
+
+    <!-- Masonry Section - Portfolio Showcase -->
+    <Section variant="customGrid" variantProps={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+      gap: '2rem',
+      sectionPadding: 'p-[var(--spacing-2xl)]',
+      alignItems: 'center',
+      animation: true,
+      responsive: {
+        sm: { gridTemplateColumns: '1fr' },
+        md: { gridTemplateColumns: 'repeat(2, 1fr)' },
+        lg: { gridTemplateColumns: 'repeat(3, 1fr)' }
+      }
+    }}>
+      <div class="space-y-10" slot="items">
+        <Card
+          variant="primary"
+          category="E-commerce"
+          title="E-commerce Platform"
+          description="Modern online store with advanced features, payment integration, and inventory management."
+          icon="<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'></path>"
+        />
+
+        <Card
+          variant="accent"
+          category="Fintech"
+          title="Mobile Banking App"
+          description="Secure financial application with biometric authentication and real-time transactions."
+          icon="<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1'></path>"
+        />
+
+        <Card
+          variant="secondary"
+          category="AI/ML"
+          title="AI Dashboard"
+          description="Intelligent analytics platform with machine learning insights and predictive analytics."
+          icon="<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'></path>"
+        />
+
+        <Card
+          variant="warning"
+          category="Social"
+          title="Social Network"
+          description="Community platform for professionals with networking and collaboration features."
+          icon="<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'></path>"
+        />
+
+        <Card
+          variant="error"
+          category="Healthcare"
+          title="Healthcare Management System"
+          description="Comprehensive patient care platform with appointment scheduling, medical records, and telemedicine."
+          icon="<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'></path>"
+        />
+
+        <Card
+          variant="info"
+          category="Real Estate"
+          title="Real Estate Platform"
+          description="Property search and management system with virtual tours and market analytics."
+          icon="<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'></path>"
+        />
+      </div>
+    </Section>
+
+    <!-- Tabs Section - Our Process -->
+    <Section variant="tabs" variantProps={{
+      tabStyle: 'pills',
+      sectionPadding: 'p-[var(--spacing-2xl)]',
+      fullWidth: true,
+      animation: true
+    }}>
+      <div slot="tabs">
+        <button data-tab="0" class="active">Discovery</button>
+        <button data-tab="1">Design</button>
+        <button data-tab="2">Development</button>
+        <button data-tab="3">Deployment</button>
+      </div>
+      <div slot="content">
+        <div data-tab-content="0" class="active">
+          <h3 class="text-2xl font-semibold mb-4 text-[var(--color-text)]">🔍 Discovery Phase</h3>
+          <p class="text-lg text-[var(--color-text-light)] mb-4">We start by understanding your business goals, target audience, and technical requirements. This phase includes:</p>
+          <ul class="list-disc list-inside space-y-2 text-[var(--color-text-light)]">
+            <li>Business analysis and requirements gathering</li>
+            <li>User research and persona development</li>
+            <li>Technical architecture planning</li>
+            <li>Project timeline and budget estimation</li>
+          </ul>
+        </div>
+        <div data-tab-content="1">
+          <h3 class="text-2xl font-semibold mb-4 text-[var(--color-text)]">🎨 Design Phase</h3>
+          <p class="text-lg text-[var(--color-text-light)] mb-4">Our designers create beautiful, intuitive interfaces that align with your brand:</p>
+          <ul class="list-disc list-inside space-y-2 text-[var(--color-text-light)]">
+            <li>Wireframing and prototyping</li>
+            <li>UI/UX design with user testing</li>
+            <li>Brand integration and visual identity</li>
+            <li>Responsive design for all devices</li>
+          </ul>
+        </div>
+        <div data-tab-content="2">
+          <h3 class="text-2xl font-semibold mb-4 text-[var(--color-text)]">⚙️ Development Phase</h3>
+          <p class="text-lg text-[var(--color-text-light)] mb-4">Our developers bring designs to life using cutting-edge technologies:</p>
+          <ul class="list-disc list-inside space-y-2 text-[var(--color-text-light)]">
+            <li>Frontend and backend development</li>
+            <li>API integration and database design</li>
+            <li>Quality assurance and testing</li>
+            <li>Performance optimization</li>
+          </ul>
+        </div>
+        <div data-tab-content="3">
+          <h3 class="text-2xl font-semibold mb-4 text-[var(--color-text)]">🚀 Deployment Phase</h3>
+          <p class="text-lg text-[var(--color-text-light)] mb-4">We ensure smooth launch and ongoing support:</p>
+          <ul class="list-disc list-inside space-y-2 text-[var(--color-text-light)]">
+            <li>Production deployment and configuration</li>
+            <li>User training and documentation</li>
+            <li>Performance monitoring and analytics</li>
+            <li>Ongoing maintenance and updates</li>
+          </ul>
+        </div>
+      </div>
+    </Section>
+
+    <!-- Accordion Section - FAQ -->
+    <Section variant="accordion" variantProps={{
+      style: 'cards',
+      sectionPadding: 'p-[var(--spacing-2xl)]',
+      behavior: 'single',
+      spacing: 'lg',
+      animation: true
+    }}>
+      <div slot="items">
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <h3 class="accordion-title">What technologies do you use?</h3>
+            <div class="accordion-icon chevron"></div>
+          </div>
+          <div class="accordion-content">
+            <p>We use modern, cutting-edge technologies including React, Vue.js, Node.js, Python, and cloud platforms like AWS and Azure. Our tech stack is chosen based on project requirements and performance needs.</p>
+          </div>
+        </div>
+        
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <h3 class="accordion-title">How long does a typical project take?</h3>
+            <div class="accordion-icon chevron"></div>
+          </div>
+          <div class="accordion-content">
+            <p>Project timelines vary based on complexity. A simple website might take 4-6 weeks, while complex applications can take 3-6 months. We provide detailed timelines during the discovery phase.</p>
+          </div>
+        </div>
+        
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <h3 class="accordion-title">Do you provide ongoing support?</h3>
+            <div class="accordion-icon chevron"></div>
+          </div>
+          <div class="accordion-content">
+            <p>Yes! We offer comprehensive support packages including maintenance, updates, security patches, and 24/7 monitoring. We're committed to your long-term success.</p>
+          </div>
+        </div>
+        
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <h3 class="accordion-title">What about project management?</h3>
+            <div class="accordion-icon chevron"></div>
+          </div>
+          <div class="accordion-content">
+            <p>We use agile methodologies with regular client communication, progress updates, and milestone reviews. You'll always know what's happening with your project.</p>
+          </div>
+        </div>
+      </div>
+    </Section>
+
+    <!-- Custom Grid Section - Technology Stack -->
+    <Section variant="customGrid" variantProps={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      gap: '2rem',
+      rowGap: '4rem',
+      sectionPadding: 'p-[var(--spacing-2xl)]',
+      columnGap: '2rem',
+      alignItems: 'stretch',
+      animation: true,
+      responsive: {
+        sm: { gridTemplateColumns: '1fr' },
+        md: { gridTemplateColumns: 'repeat(2, 1fr)' },
+        lg: { gridTemplateColumns: 'repeat(3, 1fr)' }
+      }
+    }}>
+      <div class="space-y-10" slot="items">
+        <!-- Frontend Technologies Card -->
+        <TechCard
+          title="Frontend Technologies"
+          variant="primary"
+          size="lg"
+          items={[
+            { name: "React & Next.js" },
+            { name: "Vue.js & Nuxt" },
+            { name: "TypeScript" }
+          ]}
+          icon="<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'></path>"
+        />
+        
+        <!-- Backend Technologies Card -->
+        <TechCard
+          title="Backend Technologies"
+          variant="secondary"
+          size="lg"
+          items={[
+            { name: "Node.js & Express" },
+            { name: "Python & Django" },
+            { name: "PostgreSQL & MongoDB" }
+          ]}
+          icon="<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01'></path>"
+        />
+        
+        <!-- Cloud & DevOps Card -->
+        <TechCard
+          title="Cloud & DevOps"
+          variant="accent"
+          size="lg"
+          items={[
+            { name: "AWS & Azure" },
+            { name: "Docker & Kubernetes" },
+            { name: "CI/CD Pipelines" }
+          ]}
+          icon="<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z'></path>"
+        />
+        
+        <!-- Design Tools Card -->
+        <TechCard
+          title="Design Tools"
+          variant="warning"
+          size="lg"
+          items={[
+            { name: "Figma & Sketch" },
+            { name: "Adobe Creative Suite" },
+            { name: "Prototyping Tools" }
+          ]}
+          icon="<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01'></path>"
+        />
+        
+        <!-- Testing & QA Card -->
+        <TechCard
+          title="Testing & QA"
+          variant="error"
+          size="lg"
+          items={[
+            { name: "Jest & Cypress" },
+            { name: "Selenium & Playwright" },
+            { name: "Performance Testing" }
+          ]}
+          icon="<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'></path>"
+        />
+        
+        <!-- Analytics & SEO Card -->
+        <TechCard
+          title="Analytics & SEO"
+          variant="info"
+          size="lg"
+          items={[
+            { name: "Google Analytics" },
+            { name: "Search Console" },
+            { name: "Performance Monitoring" }
+          ]}
+          icon="<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'></path>"
+        />
+      </div>
+    </Section>
 
 
-  <Section collection="faq" query="getAll" />
+   <!-- Simple Section - Call to Action -->
+    <Section variant="simple" variantProps={{ backgroundColor: "bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)]", textColor: "text-white" }}>
+      <div slot="header">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-[var(--spacing-md)]">
+          🚀 Ready to Get Started?
+        </h2>
+      </div>
+      
+      <div class="text-center">
+        <p class="text-xl mb-[var(--spacing-lg)] opacity-90">
+          Let's discuss your project and bring your vision to life. Our team is ready to help you succeed.
+        </p>
+        <div class="flex flex-wrap gap-[var(--spacing-md)] justify-center">
+          <a
+            href="/contact"
+            class="px-[var(--spacing-xl)] py-[var(--spacing-lg)] rounded-lg font-semibold transition-all duration-300 bg-white text-[var(--color-primary)] hover:bg-gray-100 shadow-lg hover:shadow-xl"
+          >
+            📞 Contact Us
+          </a>
+          <a
+            href="/portfolio"
+            class="px-[var(--spacing-xl)] py-[var(--spacing-lg)] rounded-lg font-semibold transition-all duration-300 border-2 border-white text-white hover:bg-white hover:text-[var(--color-primary)] transition-colors"
+          >
+            🎨 View Portfolio
+          </a>
+        </div>
+      </div>
+      
+      <div slot="footer">
+        <div class="text-center mt-[var(--spacing-lg)] opacity-75">
+          <p>✨ Join 500+ satisfied clients who chose Greactstro</p>
+        </div>
+      </div>
+    </Section>
 
 </ExtendedLayout>

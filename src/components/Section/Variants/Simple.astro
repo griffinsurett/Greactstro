@@ -1,0 +1,55 @@
+---
+// src/components/Section/Variants/Simple.astro
+// Simple variant component - demonstrates how easy it is to create new variants
+// Usage: <Section variant="simple"><Simple /></Section>
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  backgroundColor?: string;
+  textColor?: string;
+  padding?: string;
+  sectionPadding?: string;
+}
+
+const {
+  title = "Simple Section",
+  subtitle = "A clean, simple section layout",
+  backgroundColor = "bg-gray-50",
+  textColor = "text-gray-800",
+  padding = "py-[var(--spacing-xl)]",
+  sectionPadding = "py-[var(--spacing-xl)]"
+} = Astro.props;
+---
+
+<div class={`simple-variant ${backgroundColor} ${textColor} ${padding} ${sectionPadding}`}>
+  <!-- Header -->
+  <slot name="header">
+    <div class="text-center mb-[var(--spacing-lg)]">
+      <h2 class="text-3xl font-bold mb-[var(--spacing-sm)]">{title}</h2>
+      <p class="text-lg opacity-80">{subtitle}</p>
+    </div>
+  </slot>
+  
+  <!-- Main Content -->
+  <div class="container mx-auto">
+    <slot />
+  </div>
+  
+  <!-- Footer -->
+  <slot name="footer" />
+</div>
+
+<style>
+  .simple-variant {
+    min-height: 200px;
+  }
+  
+  .simple-variant h2 {
+    color: inherit;
+  }
+  
+  .simple-variant p {
+    color: inherit;
+  }
+</style>

@@ -1,0 +1,310 @@
+---
+// src/components/TechCard.astro
+// Reusable technology card component with full customization
+
+interface TechItem {
+  name: string;
+  icon?: string;
+  description?: string;
+}
+
+interface Props {
+  // Content props
+  title: string;
+  items: TechItem[];
+  icon?: string;
+  showArrow?: boolean;
+  
+  // Styling props
+  color?: string;
+  variant?: 'primary' | 'secondary' | 'accent' | 'warning' | 'error' | 'info' | 'custom';
+  customColor?: string;
+  
+  // Layout props
+  size?: 'sm' | 'md' | 'lg';
+  padding?: string;
+  borderRadius?: string;
+  
+  // Animation props
+  animation?: boolean;
+  hoverEffect?: boolean;
+  scaleOnHover?: boolean;
+  
+  // Additional props
+  className?: string;
+  onClick?: () => void;
+  href?: string;
+}
+
+const {
+  // Content
+  title,
+  items,
+  icon,
+  showArrow = true,
+  
+  // Styling
+  color = 'primary',
+  variant = 'primary',
+  customColor,
+  
+  // Layout
+  size = 'md',
+  padding,
+  borderRadius,
+  
+  // Animation
+  animation = true,
+  hoverEffect = true,
+  scaleOnHover = true,
+  
+  // Additional
+  className = '',
+  onClick,
+  href
+} = Astro.props;
+
+// Color mapping
+const colorMap: Record<string, string> = {
+  primary: 'var(--color-primary)',
+  secondary: 'var(--color-secondary)',
+  accent: 'var(--color-accent)',
+  warning: 'var(--color-warning)',
+  error: 'var(--color-error)',
+  info: 'var(--color-info)',
+  custom: customColor || 'var(--color-primary)'
+};
+
+const selectedColor = colorMap[variant] || colorMap[color] || colorMap.primary;
+
+// Size mapping
+const sizeMap = {
+  sm: {
+    padding: 'p-4',
+    iconSize: 'w-8 h-8',
+    iconInnerSize: 'w-4 h-4',
+    titleSize: 'text-lg',
+    itemPadding: 'p-2',
+    dotSize: 'w-2 h-2'
+  },
+  md: {
+    padding: 'p-6',
+    iconSize: 'w-10 h-10',
+    iconInnerSize: 'w-5 h-5',
+    titleSize: 'text-xl',
+    itemPadding: 'p-3',
+    dotSize: 'w-3 h-3'
+  },
+  lg: {
+    padding: 'p-8',
+    iconSize: 'w-12 h-12',
+    iconInnerSize: 'w-6 h-6',
+    titleSize: 'text-2xl',
+    itemPadding: 'p-4',
+    dotSize: 'w-3 h-3'
+  }
+};
+
+const selectedSize = sizeMap[size];
+const finalPadding = padding || selectedSize.padding;
+const finalBorderRadius = borderRadius || 'rounded-2xl';
+
+// Default icon if none provided
+const defaultIcon = icon || `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>`;
+
+// Generate dynamic styles
+const cardStyles = `
+  tech-card group 
+  bg-gradient-to-br from-[${selectedColor}]/5 via-[${selectedColor}]/10 to-[${selectedColor}]/20 
+  border border-[${selectedColor}]/20 
+  ${finalPadding} 
+  ${finalBorderRadius} 
+  ${hoverEffect ? 'hover:border-[' + selectedColor + ']/40 transition-all duration-500 hover:shadow-2xl hover:shadow-[' + selectedColor + ']/20 hover:-translate-y-2' : ''} 
+  backdrop-blur-sm 
+  ${className}
+`;
+
+const itemStyles = `
+  flex items-center space-x-3 
+  ${selectedSize.itemPadding} 
+  rounded-lg 
+  bg-white/30 hover:bg-white/50 
+  transition-all duration-300 
+  ${scaleOnHover ? 'group-hover:scale-105' : ''}
+`;
+
+const dotStyles = `
+  ${selectedSize.dotSize} 
+  bg-[${selectedColor}] 
+  rounded-full 
+  ${animation ? 'animate-pulse' : ''}
+`;
+
+// Determine if this should be a link or button
+const isLink = !!href;
+const isButton = !!onClick;
+---
+
+{isLink ? (
+  <a href={href} class={cardStyles}>
+    <!-- Header with Icon and Arrow -->
+    <div class="flex items-center justify-between mb-6">
+      <!-- Category Icon -->
+      <div class={`${selectedSize.iconSize} bg-gradient-to-br from-[${selectedColor}] to-[${selectedColor}]/80 rounded-xl flex items-center justify-center shadow-lg`}>
+        <svg class={`${selectedSize.iconInnerSize} text-white`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <Fragment set:html={defaultIcon} />
+        </svg>
+      </div>
+      
+      <!-- Arrow Icon (optional) -->
+      {showArrow && (
+        <div class={`text-[${selectedColor}]/60 group-hover:text-[${selectedColor}]/80 transition-colors duration-300`}>
+          <svg class={`${selectedSize.iconInnerSize}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+          </svg>
+        </div>
+      )}
+    </div>
+    
+    <!-- Title -->
+    <h3 class={`${selectedSize.titleSize} font-bold text-[${selectedColor}] mb-4 group-hover:text-[${selectedColor}]/90 transition-colors duration-300`}>
+      {title}
+    </h3>
+    
+    <!-- Technology Items -->
+    <div class="space-y-3">
+      {items.map((item, index) => (
+        <div class={itemStyles}>
+          <div class={`${dotStyles} ${animation ? `delay-${index * 150}` : ''}`}></div>
+          <span class="font-medium text-[${selectedColor}]/90 group-hover:text-[${selectedColor}] transition-colors duration-300">
+            {item.name}
+          </span>
+          {item.description && (
+            <span class="text-sm text-[${selectedColor}]/70 ml-2">
+              {item.description}
+            </span>
+          )}
+        </div>
+      ))}
+    </div>
+  </a>
+) : isButton ? (
+  <button type="button" class={cardStyles} role="button" tabindex="0">
+    <!-- Header with Icon and Arrow -->
+    <div class="flex items-center justify-between mb-6">
+      <!-- Category Icon -->
+      <div class={`${selectedSize.iconSize} bg-gradient-to-br from-[${selectedColor}] to-[${selectedColor}]/80 rounded-xl flex items-center justify-center shadow-lg`}>
+        <svg class={`${selectedSize.iconInnerSize} text-white`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <Fragment set:html={defaultIcon} />
+        </svg>
+      </div>
+      
+      <!-- Arrow Icon (optional) -->
+      {showArrow && (
+        <div class={`text-[${selectedColor}]/60 group-hover:text-[${selectedColor}]/80 transition-colors duration-300`}>
+          <svg class={`${selectedSize.iconInnerSize}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+          </svg>
+        </div>
+      )}
+    </div>
+    
+    <!-- Title -->
+    <h3 class={`${selectedSize.titleSize} font-bold text-[${selectedColor}] mb-4 group-hover:text-[${selectedColor}]/90 transition-colors duration-300`}>
+      {title}
+    </h3>
+    
+    <!-- Technology Items -->
+    <div class="space-y-3">
+      {items.map((item, index) => (
+        <div class={itemStyles}>
+          <div class={`${dotStyles} ${animation ? `delay-${index * 150}` : ''}`}></div>
+          <span class="font-medium text-[${selectedColor}]/90 group-hover:text-[${selectedColor}] transition-colors duration-300">
+            {item.name}
+          </span>
+          {item.description && (
+            <span class="text-sm text-[${selectedColor}]/70 ml-2">
+              {item.description}
+            </span>
+          )}
+        </div>
+      ))}
+    </div>
+  </button>
+) : (
+  <div class={cardStyles}>
+    <!-- Header with Icon and Arrow -->
+    <div class="flex items-center justify-between mb-6">
+      <!-- Category Icon -->
+      <div class={`${selectedSize.iconSize} bg-gradient-to-br from-[${selectedColor}] to-[${selectedColor}]/80 rounded-xl flex items-center justify-center shadow-lg`}>
+        <svg class={`${selectedSize.iconInnerSize} text-white`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <Fragment set:html={defaultIcon} />
+        </svg>
+      </div>
+      
+      <!-- Arrow Icon (optional) -->
+      {showArrow && (
+        <div class={`text-[${selectedColor}]/60 group-hover:text-[${selectedColor}]/80 transition-colors duration-300`}>
+          <svg class={`${selectedSize.iconInnerSize}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+          </svg>
+        </div>
+      )}
+    </div>
+    
+    <!-- Title -->
+    <h3 class={`${selectedSize.titleSize} font-bold text-[${selectedColor}] mb-4 group-hover:text-[${selectedColor}]/90 transition-colors duration-300`}>
+      {title}
+    </h3>
+    
+    <!-- Technology Items -->
+    <div class="space-y-3">
+      {items.map((item, index) => (
+        <div class={itemStyles}>
+          <div class={`${dotStyles} ${animation ? `delay-${index * 150}` : ''}`}></div>
+          <span class="font-medium text-[${selectedColor}]/90 group-hover:text-[${selectedColor}] transition-colors duration-300">
+            {item.name}
+          </span>
+          {item.description && (
+            <span class="text-sm text-[${selectedColor}]/70 ml-2">
+              {item.description}
+            </span>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+<style>
+  /* Ensure color variables are properly applied */
+  .tech-card {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .tech-card:hover {
+    transform: translateY(-0.5rem);
+  }
+  
+  /* Animation delays for dots */
+  .delay-0 { animation-delay: 0ms; }
+  .delay-150 { animation-delay: 150ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-450 { animation-delay: 450ms; }
+  .delay-600 { animation-delay: 600ms; }
+  
+  /* Focus states for accessibility */
+  .tech-card:focus {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+  
+  /* Button-specific styles */
+  .tech-card[role="button"]:hover {
+    cursor: pointer;
+  }
+  
+  .tech-card[role="button"]:active {
+    transform: translateY(-0.25rem);
+  }
+</style>

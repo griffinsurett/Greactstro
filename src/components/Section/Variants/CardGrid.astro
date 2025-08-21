@@ -1,0 +1,100 @@
+---
+// src/components/Section/Variants/CardGrid.astro
+// Card Grid variant component for the Section component
+// Usage: <Section variant="cardGrid"><CardGrid /></Section>
+
+interface Props {
+  columns?: {
+    sm?: number;
+    md?: number;
+    lg?: number;
+    xl?: number;
+  };
+  gap?: string;
+  cardClass?: string;
+  showShadows?: boolean;
+  hoverEffect?: boolean;
+  backgroundColor?: string;
+  textColor?: string;
+  sectionPadding?: string;
+}
+
+const {
+  columns = { sm: 1, md: 2, lg: 3, xl: 4 },
+  gap = "gap-[var(--spacing-lg)]",
+  cardClass = "bg-white rounded-lg p-[var(--spacing-md)]",
+  showShadows = true,
+  hoverEffect = true,
+  backgroundColor,
+  textColor,
+  sectionPadding = "py-[var(--spacing-xl)]"
+} = Astro.props;
+
+// Check if backgroundColor is a Tailwind class or CSS value
+const isTailwindClass = backgroundColor && backgroundColor.startsWith('bg-');
+const bgClass = isTailwindClass ? backgroundColor : '';
+const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundColor}` : '';
+const textStyle = textColor ? `color: ${textColor}` : '';
+
+// Generate responsive grid classes
+const gridClasses = [
+  `grid-cols-${columns.sm || 1}`,
+  `md:grid-cols-${columns.md || 2}`,
+  `lg:grid-cols-${columns.lg || 3}`,
+  `xl:grid-cols-${columns.xl || 4}`
+].join(' ');
+
+const finalCardClass = `${cardClass} ${
+  showShadows ? 'shadow-md' : ''
+} ${
+  hoverEffect ? 'transition-all duration-300 hover:shadow-lg hover:-translate-y-1' : ''
+}`;
+---
+
+<div 
+  class={`card-grid-variant grid ${gridClasses} ${gap} ${bgClass} ${sectionPadding}`}
+  style={bgStyle}
+>
+  <!-- Default Cards -->
+  <slot>
+    <!-- Example Card 1 -->
+    <div class={finalCardClass}>
+      <div class="space-y-[var(--spacing-sm)]">
+        <h3 class="text-xl font-semibold text-[var(--color-text)]">Card Title 1</h3>
+        <p class="text-gray-600">This is an example card. Use slots to customize the content.</p>
+        <button class="text-[var(--color-primary)] hover:underline">Learn More</button>
+      </div>
+    </div>
+    
+    <!-- Example Card 2 -->
+    <div class={finalCardClass}>
+      <div class="space-y-[var(--spacing-sm)]">
+        <h3 class="text-xl font-semibold text-[var(--color-text)]">Card Title 2</h3>
+        <p class="text-gray-600">Another example card with custom styling and hover effects.</p>
+        <button class="text-[var(--color-primary)] hover:underline">Learn More</button>
+      </div>
+    </div>
+    
+    <!-- Example Card 3 -->
+    <div class={finalCardClass}>
+      <div class="space-y-[var(--spacing-sm)]">
+        <h3 class="text-xl font-semibold text-[var(--color-text)]">Card Title 3</h3>
+        <p class="text-gray-600">Third example card demonstrating the grid layout.</p>
+        <button class="text-[var(--color-primary)] hover:underline">Learn More</button>
+      </div>
+    </div>
+  </slot>
+  
+  <!-- Custom Cards via named slots -->
+  <slot name="cards" />
+</div>
+
+<style>
+  .card-grid-variant {
+    min-height: 300px;
+  }
+  
+  .card-grid-variant > * {
+    min-height: 200px;
+  }
+</style>
