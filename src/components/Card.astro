@@ -1,11 +1,11 @@
 ---
 interface Props {
+  variant?: "default" | "primary" | "secondary" | "accent" | "success" | "warning" | "error" | "info" | "service" | "project";
+  size?: "sm" | "md" | "lg" | "xl";
   icon?: string;
   category?: string;
   title: string;
-  description: string;
-  variant?: 'default' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'error' | 'info';
-  size?: 'sm' | 'md' | 'lg';
+  description?: string;
   hoverEffect?: boolean;
   className?: string;
   href?: string;

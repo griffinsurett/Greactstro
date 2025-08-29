@@ -1,36 +1,22 @@
 ---
-// src/pages/index.astro
+// src/pages/collection-demo.astro
+// Demo page showing Section component with content collections
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Section from '@/components/Section/Section.astro';
-import TechCard from '@/components/TechCard.astro';
-import Card from '@/components/Card.astro';
 ---
 
-<BaseLayout title="Greactstro - Modern Web Solutions">
+<BaseLayout title="Collection Demo - Section Component">
   <main>
     <!-- Hero Section -->
     <Section variant="hero" variantProps={{
-      backgroundColor: "bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900",
-      sectionPadding: "py-20",
-      showBadge: true,
-      badgeText: "✨ Trusted by 500+ companies",
-      showStats: true,
-      stats: [
-        { number: "500+", label: "Happy Clients" },
-        { number: "1000+", label: "Projects Delivered" },
-        { number: "24/7", label: "Support" }
-      ],
-      showScrollIndicator: true
+      backgroundColor: "bg-gradient-to-br from-blue-900 to-purple-900",
+      sectionPadding: "py-20"
     }}>
       <div slot="heading">
-        <h1 class="text-6xl font-bold text-white">Transform Your Digital Presence</h1>
+        <h1 class="text-6xl font-bold text-white">Content Collections + Section Variants</h1>
       </div>
       <div slot="description">
-        <p class="text-xl text-gray-200">We create stunning, responsive websites and digital solutions that drive results for modern businesses.</p>
-      </div>
-      <div slot="buttons">
-        <a href="#services" class="inline-block bg-white text-blue-900 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors mr-4">Get Started</a>
-        <a href="#portfolio" class="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-900 transition-colors">View Portfolio</a>
+        <p class="text-xl text-gray-200">See how the Section component integrates with Astro content collections</p>
       </div>
     </Section>
 
@@ -95,47 +81,40 @@ import Card from '@/components/Card.astro';
       </div>
     </Section>
 
-    <!-- Technology Stack Section -->
+    <!-- Centered Section -->
     <Section variant="centered" variantProps={{
       backgroundColor: "bg-gray-900",
       textColor: "text-white",
       sectionPadding: "py-16"
     }}>
       <div slot="additional">
+        <h2 class="text-3xl font-bold mb-8">Our Technology Stack</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <TechCard
-            title="React"
-            description="Modern UI development"
-            icon="⚛️"
-            color="blue"
-            href="#"
-          />
-          <TechCard
-            title="Astro"
-            description="Static site generation"
-            icon="🚀"
-            color="purple"
-            href="#"
-          />
-          <TechCard
-            title="Tailwind CSS"
-            description="Utility-first CSS"
-            icon="🎨"
-            color="cyan"
-            href="#"
-          />
-          <TechCard
-            title="TypeScript"
-            description="Type-safe JavaScript"
-            icon="📘"
-            color="blue"
-            href="#"
-          />
+          <div class="text-center">
+            <div class="text-4xl mb-2">⚛️</div>
+            <h3 class="font-semibold">React</h3>
+            <p class="text-sm text-gray-300">Modern UI development</p>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl mb-2">🚀</div>
+            <h3 class="font-semibold">Astro</h3>
+            <p class="text-sm text-gray-300">Static site generation</p>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl mb-2">🎨</div>
+            <h3 class="font-semibold">Tailwind CSS</h3>
+            <p class="text-sm text-gray-300">Utility-first CSS</p>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl mb-2">📘</div>
+            <h3 class="font-semibold">TypeScript</h3>
+            <p class="text-sm text-gray-300">Type-safe JavaScript</p>
+          </div>
         </div>
       </div>
     </Section>
 
-    <!-- Portfolio Section -->
+    <!-- Masonry Section -->
     <Section variant="masonry" variantProps={{
       columns: { xs: 1, sm: 2, md: 3 },
       backgroundColor: "bg-white",
@@ -157,7 +136,7 @@ import Card from '@/components/Card.astro';
       </div>
     </Section>
 
-    <!-- Testimonials Section -->
+    <!-- Tabs Section -->
     <Section variant="tabs" variantProps={{
       tabStyle: "pills",
       backgroundColor: "bg-blue-50",
@@ -165,58 +144,44 @@ import Card from '@/components/Card.astro';
     }}>
       <div slot="tabs">
         <div class="flex flex-wrap gap-2 justify-center mb-8">
-          <button class="tab-button active px-6 py-2 bg-blue-500 text-white rounded-full">Client Reviews</button>
-          <button class="tab-button px-6 py-2 bg-gray-200 text-gray-700 rounded-full">Success Stories</button>
+          <button class="tab-button active px-6 py-2 bg-blue-500 text-white rounded-full">Services</button>
+          <button class="tab-button px-6 py-2 bg-gray-200 text-gray-700 rounded-full">Projects</button>
+          <button class="tab-button px-6 py-2 bg-gray-200 text-gray-700 rounded-full">Testimonials</button>
         </div>
       </div>
       <div slot="content">
         <div class="tab-content active">
-          <div class="grid md:grid-cols-2 gap-8">
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-              <p class="text-gray-700 italic mb-4 text-lg">"Working with this team was a fantastic experience. They delivered beyond expectations!"</p>
-              <div class="flex items-center">
-                <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
-                <div>
-                  <p class="font-semibold">Happy Client</p>
-                  <p class="text-gray-500">Verified Customer</p>
-                </div>
-              </div>
+          <div class="grid md:grid-cols-3 gap-6">
+            <div class="text-center">
+              <div class="text-4xl mb-2">🎨</div>
+              <h3 class="font-semibold">Web Design</h3>
             </div>
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-              <p class="text-gray-700 italic mb-4 text-lg">"Amazing service and incredible results. Highly recommended!"</p>
-              <div class="flex items-center">
-                <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
-                <div>
-                  <p class="font-semibold">Satisfied Customer</p>
-                  <p class="text-gray-500">Verified Customer</p>
-                </div>
-              </div>
+            <div class="text-center">
+              <div class="text-4xl mb-2">📱</div>
+              <h3 class="font-semibold">Mobile Apps</h3>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl mb-2">⚡</div>
+              <h3 class="font-semibold">Performance</h3>
             </div>
           </div>
         </div>
         <div class="tab-content hidden">
           <div class="text-center">
-            <h3 class="text-2xl font-bold mb-6">Success Metrics</h3>
-            <div class="grid md:grid-cols-3 gap-8">
-              <div class="bg-white p-6 rounded-lg shadow">
-                <div class="text-3xl font-bold text-blue-600 mb-2">98%</div>
-                <p class="text-gray-600">Client Satisfaction</p>
-              </div>
-              <div class="bg-white p-6 rounded-lg shadow">
-                <div class="text-3xl font-bold text-green-600 mb-2">3x</div>
-                <p class="text-gray-600">Traffic Increase</p>
-              </div>
-              <div class="bg-white p-6 rounded-lg shadow">
-                <div class="text-3xl font-bold text-purple-600 mb-2">50%</div>
-                <p class="text-gray-600">Conversion Boost</p>
-              </div>
-            </div>
+            <h3 class="text-2xl font-bold mb-6">Our Projects</h3>
+            <p class="text-gray-600">Check out some of our recent work.</p>
+          </div>
+        </div>
+        <div class="tab-content hidden">
+          <div class="text-center">
+            <h3 class="text-2xl font-bold mb-6">Client Reviews</h3>
+            <p class="text-gray-600">What our clients say about us.</p>
           </div>
         </div>
       </div>
     </Section>
 
-    <!-- FAQ Section -->
+    <!-- Accordion Section -->
     <Section variant="accordion" variantProps={{
       style: "cards",
       backgroundColor: "bg-gray-50",
@@ -258,26 +223,6 @@ import Card from '@/components/Card.astro';
         </div>
       </div>
     </Section>
-
-    <!-- CTA Section -->
-    <Section variant="centered" variantProps={{
-      backgroundColor: "bg-gradient-to-r from-blue-600 to-purple-600",
-      textColor: "text-white",
-      sectionPadding: "py-20"
-    }}>
-      <div slot="additional">
-        <h2 class="text-4xl font-bold mb-6">Ready to Start Your Project?</h2>
-        <p class="text-xl mb-8 opacity-90">Let's create something amazing together. Get in touch today!</p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/contact" class="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center">
-            Get Started
-          </a>
-          <a href="/portfolio" class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors text-center">
-            View Portfolio
-          </a>
-        </div>
-      </div>
-    </Section>
   </main>
 </BaseLayout>
 
@@ -303,14 +248,12 @@ import Card from '@/components/Card.astro';
       const content = trigger.nextElementSibling;
       const icon = trigger.querySelector('span:last-child');
       
-      if (content && icon) {
-        if (content.classList.contains('hidden')) {
-          content.classList.remove('hidden');
-          icon.textContent = '−';
-        } else {
-          content.classList.add('hidden');
-          icon.textContent = '+';
-        }
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        icon.textContent = '−';
+      } else {
+        content.classList.add('hidden');
+        icon.textContent = '+';
       }
     });
   });

@@ -1,107 +1,47 @@
 ---
 // src/components/Section/VariantWrapper.astro
-// Complete variant wrapper with all advanced section variants
-
-import Hero from '@/components/Section/Variants/Hero.astro';
-import TwoCol from '@/components/Section/Variants/TwoCol.astro';
-import CardGrid from '@/components/Section/Variants/CardGrid.astro';
-import Centered from '@/components/Section/Variants/Centered.astro';
-import Simple from '@/components/Section/Variants/Simple.astro';
-import Masonry from '@/components/Section/Variants/Masonry.astro';
-import Tabs from '@/components/Section/Variants/Tabs.astro';
-import Accordion from '@/components/Section/Variants/Accordion.astro';
-import CustomGrid from '@/components/Section/Variants/CustomGrid.astro';
+/**
+ * VariantWrapper - Renders the appropriate variant component based on the variant prop
+ * Now supports content collection data integration
+ */
+import Hero from "./Variants/Hero.astro";
+import TwoCol from "./Variants/TwoCol.astro";
+import CardGrid from "./Variants/CardGrid.astro";
+import Centered from "./Variants/Centered.astro";
+import Simple from "./Variants/Simple.astro";
+import Masonry from "./Variants/Masonry.astro";
+import Tabs from "./Variants/Tabs.astro";
+import Accordion from "./Variants/Accordion.astro";
+import CustomGrid from "./Variants/CustomGrid.astro";
 
 interface Props {
   variant: string;
-  variantProps?: any;
+  variantProps?: Record<string, any>;
+  collectionData?: any[];
+  meta?: any;
 }
 
-const { variant, variantProps = {} } = Astro.props;
+const { variant, variantProps = {}, collectionData = [], meta = null } = Astro.props;
+
+// Merge meta data with variant props for better content integration
+const enhancedProps = {
+  ...variantProps,
+  collectionData: collectionData || [],
+  meta: meta || {},
+  // Use meta data as defaults if available (with null checks)
+  heading: variantProps.heading || (meta?.heading || ''),
+  description: variantProps.description || (meta?.description || ''),
+  buttons: variantProps.buttons || (meta?.buttons || []),
+};
 ---
 
-{/* Hero Variant */}
-{variant === 'hero' && (
-  <Hero {...variantProps}>
-    <slot name="heading" />
-    <slot name="description" />
-    <slot name="buttons" />
-    <slot />
-  </Hero>
-)}
-
-{/* Two Column Variant */}
-{variant === 'twoCol' && (
-  <TwoCol {...variantProps}>
-    <slot name="left" />
-    <slot name="right" />
-    <slot />
-  </TwoCol>
-)}
-
-{/* Card Grid Variant */}
-{variant === 'cardGrid' && (
-  <CardGrid {...variantProps}>
-    <slot name="cards" />
-    <slot />
-  </CardGrid>
-)}
-
-{/* Centered Variant */}
-{variant === 'centered' && (
-  <Centered {...variantProps}>
-    <slot name="additional" />
-    <slot />
-    <slot name="footer" />
-  </Centered>
-)}
-
-{/* Simple Variant */}
-{variant === 'simple' && (
-  <Simple {...variantProps}>
-    <slot name="header" />
-    <slot />
-    <slot name="footer" />
-  </Simple>
-)}
-
-{/* Masonry Variant */}
-{variant === 'masonry' && (
-  <Masonry {...variantProps}>
-    <slot name="items" />
-    <slot />
-  </Masonry>
-)}
-
-{/* Tabs Variant */}
-{variant === 'tabs' && (
-  <Tabs {...variantProps}>
-    <slot name="tabs" />
-    <slot name="content" />
-    <slot />
-  </Tabs>
-)}
-
-{/* Accordion Variant */}
-{variant === 'accordion' && (
-  <Accordion {...variantProps}>
-    <slot name="items" />
-    <slot />
-  </Accordion>
-)}
-
-{/* Custom Grid Variant */}
-{variant === 'customGrid' && (
-  <CustomGrid {...variantProps}>
-    <slot name="items" />
-    <slot />
-  </CustomGrid>
-)}
-
-{/* Fallback for unknown variants */}
-{!['hero', 'twoCol', 'cardGrid', 'centered', 'simple', 'masonry', 'tabs', 'accordion', 'customGrid'].includes(variant) && (
-  <div class="variant-fallback">
-    <p>Unknown variant: {variant}</p>
-    <slot />
-  </div>
-)}
+{/* Render the appropriate variant component */}
+{variant === 'hero' && <Hero {...enhancedProps} />}
+{variant === 'twoCol' && <TwoCol {...enhancedProps} />}
+{variant === 'cardGrid' && <CardGrid {...enhancedProps} />}
+{variant === 'centered' && <Centered {...enhancedProps} />}
+{variant === 'simple' && <Simple {...enhancedProps} />}
+{variant === 'masonry' && <Masonry {...enhancedProps} />}
+{variant === 'tabs' && <Tabs {...enhancedProps} />}
+{variant === 'accordion' && <Accordion {...enhancedProps} />}
+{variant === 'customGrid' && <CustomGrid {...enhancedProps} />}

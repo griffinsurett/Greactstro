@@ -18,6 +18,9 @@ interface Props {
   showStats?: boolean;
   stats?: Array<{ number: string; label: string }>;
   showScrollIndicator?: boolean;
+  // New props for collection integration
+  collectionData?: any[];
+  meta?: any;
 }
 
 const {
@@ -29,6 +32,7 @@ const {
   minHeight = "100vh",
   textColor = "text-white",
   backgroundColor,
+  sectionPadding = "py-14",
   showBadge = true,
   badgeText = "✨ Trusted by 500+ companies",
   showStats = true,
@@ -38,8 +42,16 @@ const {
     { number: "24/7", label: "Support" }
   ],
   showScrollIndicator = true,
-  sectionPadding = "py-14"
+  // New props for collection integration
+  collectionData = [],
+  meta = {}
 } = Astro.props;
+
+// Use collection data if available, otherwise use props
+const finalHeading = collectionData.length > 0 ? collectionData[0]?.data?.title || heading : heading;
+const finalDescription = collectionData.length > 0 ? collectionData[0]?.data?.description || description : description;
+const finalButtons = buttons.length > 0 ? buttons : (collectionData[0]?.data?.buttons || []);
+const finalBackgroundImage = backgroundImage || collectionData[0]?.data?.featuredImage;
 
 // Check if backgroundColor is a Tailwind class or CSS value
 const isTailwindClass = backgroundColor && backgroundColor.startsWith('bg-');
@@ -49,10 +61,10 @@ const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundC
 
 <div class={`hero-variant relative w-full overflow-hidden ${sectionPadding}`} style={`min-height: ${minHeight}`}>
   {/* Background with gradient overlay */}
-  {backgroundImage ? (
+  {finalBackgroundImage ? (
     <div 
       class="absolute inset-0 bg-cover bg-center bg-fixed z-0"
-      style={`background-image: url(${backgroundImage})`}
+      style={`background-image: url(${finalBackgroundImage})`}
     >
       <div 
         class="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/60"
@@ -87,7 +99,7 @@ const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundC
       <slot name="heading">
         <h1 class="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 leading-tight animate-fade-in-up animation-delay-200">
           <span class="bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent">
-            {heading}
+            {finalHeading}
           </span>
         </h1>
       </slot>
@@ -95,15 +107,15 @@ const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundC
       {/* Description */}
       <slot name="description">
         <p class="text-xl sm:text-2xl lg:text-3xl mb-12 max-w-4xl mx-auto leading-relaxed opacity-90 animate-fade-in-up animation-delay-400">
-          {description}
+          {finalDescription}
         </p>
       </slot>
       
       {/* Buttons */}
       <slot name="buttons">
-        {buttons && buttons.length > 0 ? (
+        {finalButtons && finalButtons.length > 0 ? (
           <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 animate-fade-in-up animation-delay-600">
-            {buttons.map((button, index) => (
+            {finalButtons.map((button, index) => (
               <a 
                 href={button?.link || "#"} 
                 class={`group relative px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-500 transform hover:scale-105 hover:-translate-y-1 ${

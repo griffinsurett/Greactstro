@@ -1,11 +1,12 @@
 ---
 // src/components/Section/Section.astro
 /**
- * Section Component - Advanced variant system with maximum flexibility
+ * Section Component - Advanced variant system with content collection integration
  * 
  * Usage:
  * - Basic: <Section>Content here</Section>
  * - Variants: <Section variant="hero"><div slot="heading">Title</div></Section>
+ * - Collection-based: <Section collection="services" query="featured" variant="cardGrid" />
  * - Advanced: <Section variant="customGrid" variantProps={{...}}>Content</Section>
  */
 import VariantWrapper from "./VariantWrapper.astro";
@@ -17,11 +18,51 @@ const {
   variant,
   variantProps = {},
   
+  // Content collection props
+  collection,
+  query,
+  
   // Styling props
   sectionClass = "",
   
   ...props
 } = Astro.props;
+
+// Get collection data if specified
+let collectionData: any[] = [];
+let meta: any = null;
+
+if (collection) {
+  try {
+    // Use dynamic import to avoid TypeScript issues with collection names
+    const { getCollection, getEntry } = await import("astro:content");
+    const collectionEntries = await getCollection(collection as any);
+    
+    // Apply query filtering if specified
+    if (query === "featured") {
+      collectionData = collectionEntries.filter((item: any) => item.data.featured);
+    } else if (query === "related") {
+      // For now, just get all items - can be enhanced with actual relationship logic
+      collectionData = collectionEntries;
+    } else if (query === "recent") {
+      collectionData = collectionEntries
+        .sort((a: any, b: any) => new Date(b.data.date || 0).getTime() - new Date(a.data.date || 0).getTime())
+        .slice(0, 6);
+    } else {
+      collectionData = collectionEntries;
+    }
+    
+    // Get meta data if available
+    try {
+      const metaEntry = await getEntry(collection as any, "_meta");
+      meta = metaEntry?.data;
+    } catch {
+      // No meta file, that's okay
+    }
+  } catch (error) {
+    console.warn(`Could not load collection ${collection}:`, error);
+  }
+}
 
 // Check if we should use variant system
 const shouldUseVariant = variant && [
@@ -38,9 +79,14 @@ const Element = tagName;
   class={`${sectionClass} relative w-full`}
   {...props}
 >
-  {/* Variant System */}
+  {/* Variant System with Collection Data */}
   {shouldUseVariant ? (
-    <VariantWrapper variant={variant} variantProps={variantProps}>
+    <VariantWrapper 
+      variant={variant} 
+      variantProps={variantProps}
+      collectionData={collectionData}
+      meta={meta}
+    >
       {/* Hero Slots */}
       <slot name="heading" />
       <slot name="description" />
@@ -76,9 +122,23 @@ const Element = tagName;
       <slot />
     </VariantWrapper>
   ) : (
-    /* Default Section Layout */
+    /* Default Section Layout with Collection Data */
     <div class="content-section max-w-full z-10">
-      <slot />
+      {collectionData.length > 0 ? (
+        <div class="collection-content">
+          {collectionData.map((item, index) => (
+            <div class="collection-item">
+              {item.data.title && <h3>{item.data.title}</h3>}
+              {item.data.description && <p>{item.data.description}</p>}
+              {item.data.featuredImage && (
+                <img src={item.data.featuredImage} alt={item.data.title || 'Featured image'} />
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <slot />
+      )}
     </div>
   )}
 </Element>
