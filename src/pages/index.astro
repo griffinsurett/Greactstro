@@ -1,14 +1,15 @@
 ---
 // src/pages/index.astro
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Section from '@/components/Section/Section.astro';
+import SimpleSection from '@/components/Section/SimpleSection.astro';
 import TechCard from '@/components/TechCard.astro';
 import Card from '@/components/Card.astro';
 ---
 
 <BaseLayout title="Greactstro - Modern Web Solutions">
   <main>
-    <!-- Hero Section -->
+    <!-- Hero Section - Temporarily disabled due to error -->
+    <!--
     <Section variant="hero" variantProps={{
       backgroundColor: "bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900",
       sectionPadding: "py-20",
@@ -33,34 +34,36 @@ import Card from '@/components/Card.astro';
         <a href="#portfolio" class="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-900 transition-colors">View Portfolio</a>
       </div>
     </Section>
+    -->
 
-    <!-- Services Section -->
-    <Section variant="cardGrid" variantProps={{
-      columns: { sm: 1, md: 2, lg: 3 },
-      backgroundColor: "bg-gray-50",
-      sectionPadding: "py-16"
-    }}>
-      <div slot="cards">
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <div class="text-4xl mb-4">🎨</div>
-          <h3 class="text-xl font-semibold mb-2">Web Design</h3>
-          <p class="text-gray-600">Professional web design services for modern businesses.</p>
-        </div>
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <div class="text-4xl mb-4">📱</div>
-          <h3 class="text-xl font-semibold mb-2">Mobile Apps</h3>
-          <p class="text-gray-600">Native and cross-platform mobile applications.</p>
-        </div>
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <div class="text-4xl mb-4">⚡</div>
-          <h3 class="text-xl font-semibold mb-2">Performance</h3>
-          <p class="text-gray-600">Lightning-fast websites and apps.</p>
-        </div>
+    <!-- Temporary Hero Replacement -->
+    <div class="bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 py-20 text-center">
+      <h1 class="text-6xl font-bold text-white mb-6">Transform Your Digital Presence</h1>
+      <p class="text-xl text-gray-200 mb-8">We create stunning, responsive websites and digital solutions that drive results for modern businesses.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#services" class="inline-block bg-white text-blue-900 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors">Get Started</a>
+        <a href="#portfolio" class="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-900 transition-colors">View Portfolio</a>
       </div>
-    </Section>
+    </div>
+
+    <!-- Services Section - Now using SimpleSection with collection data -->
+    <SimpleSection 
+      variant="cardGrid" 
+      collection="services"
+      query="getAll"
+      variantProps={{
+        columns: { sm: 1, md: 2, lg: 3 },
+        backgroundColor: "bg-gray-50",
+        sectionPadding: "py-16"
+      }}
+    >
+      <div slot="heading">
+        <h2 class="text-4xl font-bold text-center mb-12">Our Services</h2>
+      </div>
+    </SimpleSection>
 
     <!-- Two Column Section -->
-    <Section variant="twoCol" variantProps={{
+    <SimpleSection variant="twoCol" variantProps={{
       backgroundColor: "bg-white",
       sectionPadding: "py-16"
     }}>
@@ -93,14 +96,20 @@ import Card from '@/components/Card.astro';
           </a>
         </div>
       </div>
-    </Section>
+    </SimpleSection>
 
     <!-- Technology Stack Section -->
-    <Section variant="centered" variantProps={{
+    <SimpleSection variant="centered" variantProps={{
       backgroundColor: "bg-gray-900",
       textColor: "text-white",
       sectionPadding: "py-16"
     }}>
+      <div slot="heading">
+        <h2 class="text-4xl font-bold mb-6">Our Technology Stack</h2>
+      </div>
+      <div slot="description">
+        <p class="text-xl text-gray-300 mb-12">We use cutting-edge technologies to build modern, scalable solutions.</p>
+      </div>
       <div slot="additional">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
           <TechCard
@@ -133,141 +142,81 @@ import Card from '@/components/Card.astro';
           />
         </div>
       </div>
-    </Section>
+    </SimpleSection>
 
-    <!-- Portfolio Section -->
-    <Section variant="masonry" variantProps={{
-      columns: { xs: 1, sm: 2, md: 3 },
-      backgroundColor: "bg-white",
-      sectionPadding: "py-16"
-    }}>
-      <div slot="items">
-        <div class="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
-          <h3 class="text-lg font-semibold mb-2">Business Landing Page</h3>
-          <p class="text-gray-600 mb-4">A high-converting landing page for a corporate business.</p>
-        </div>
-        <div class="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
-          <h3 class="text-lg font-semibold mb-2">E-commerce Store</h3>
-          <p class="text-gray-600 mb-4">Modern online store with advanced features.</p>
-        </div>
-        <div class="bg-gray-50 rounded-lg p-6 hover:bg-gray-100 transition-colors">
-          <h3 class="text-lg font-semibold mb-2">Portfolio Website</h3>
-          <p class="text-gray-600 mb-4">Creative portfolio showcasing amazing work.</p>
-        </div>
+    <!-- Portfolio Section - Now using SimpleSection with collection data -->
+    <SimpleSection 
+      variant="masonry" 
+      collection="projects"
+      query="getAll"
+      variantProps={{
+        columns: { xs: 1, sm: 2, md: 3 },
+        backgroundColor: "bg-white",
+        sectionPadding: "py-16"
+      }}
+    >
+      <div slot="heading">
+        <h2 class="text-4xl font-bold text-center mb-12">Our Portfolio</h2>
       </div>
-    </Section>
+      <div slot="description">
+        <p class="text-xl text-gray-600 text-center mb-12">Discover some of our recent work and success stories.</p>
+      </div>
+    </SimpleSection>
 
-    <!-- Testimonials Section -->
-    <Section variant="tabs" variantProps={{
-      tabStyle: "pills",
-      backgroundColor: "bg-blue-50",
-      sectionPadding: "py-16"
-    }}>
+    <!-- Testimonials Section - Now using SimpleSection with collection data -->
+    <SimpleSection 
+      variant="tabs" 
+      collection="testimonials"
+      query="getAll"
+      variantProps={{
+        tabStyle: "pills",
+        backgroundColor: "bg-blue-50",
+        sectionPadding: "py-16"
+      }}
+    >
+      <div slot="heading">
+        <h2 class="text-4xl font-bold text-center mb-12">What Our Clients Say</h2>
+      </div>
       <div slot="tabs">
         <div class="flex flex-wrap gap-2 justify-center mb-8">
           <button class="tab-button active px-6 py-2 bg-blue-500 text-white rounded-full">Client Reviews</button>
           <button class="tab-button px-6 py-2 bg-gray-200 text-gray-700 rounded-full">Success Stories</button>
         </div>
       </div>
-      <div slot="content">
-        <div class="tab-content active">
-          <div class="grid md:grid-cols-2 gap-8">
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-              <p class="text-gray-700 italic mb-4 text-lg">"Working with this team was a fantastic experience. They delivered beyond expectations!"</p>
-              <div class="flex items-center">
-                <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
-                <div>
-                  <p class="font-semibold">Happy Client</p>
-                  <p class="text-gray-500">Verified Customer</p>
-                </div>
-              </div>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-              <p class="text-gray-700 italic mb-4 text-lg">"Amazing service and incredible results. Highly recommended!"</p>
-              <div class="flex items-center">
-                <div class="w-12 h-12 bg-gray-300 rounded-full mr-4"></div>
-                <div>
-                  <p class="font-semibold">Satisfied Customer</p>
-                  <p class="text-gray-500">Verified Customer</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="tab-content hidden">
-          <div class="text-center">
-            <h3 class="text-2xl font-bold mb-6">Success Metrics</h3>
-            <div class="grid md:grid-cols-3 gap-8">
-              <div class="bg-white p-6 rounded-lg shadow">
-                <div class="text-3xl font-bold text-blue-600 mb-2">98%</div>
-                <p class="text-gray-600">Client Satisfaction</p>
-              </div>
-              <div class="bg-white p-6 rounded-lg shadow">
-                <div class="text-3xl font-bold text-green-600 mb-2">3x</div>
-                <p class="text-gray-600">Traffic Increase</p>
-              </div>
-              <div class="bg-white p-6 rounded-lg shadow">
-                <div class="text-3xl font-bold text-purple-600 mb-2">50%</div>
-                <p class="text-gray-600">Conversion Boost</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Section>
+    </SimpleSection>
 
-    <!-- FAQ Section -->
-    <Section variant="accordion" variantProps={{
-      style: "cards",
-      backgroundColor: "bg-gray-50",
-      sectionPadding: "py-16"
-    }}>
-      <div slot="items">
-        <div class="accordion-item">
-          <button class="accordion-trigger w-full text-left p-4 bg-white rounded-lg shadow mb-2 hover:shadow-md transition-shadow">
-            <div class="flex items-center justify-between">
-              <span class="text-lg font-semibold">What technologies do you use?</span>
-              <span class="text-2xl">+</span>
-            </div>
-          </button>
-          <div class="accordion-content hidden p-4 bg-white rounded-lg shadow">
-            <p class="text-gray-600">We use modern technologies including React, Vue.js, Node.js, Python, and cloud platforms like AWS and Azure.</p>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <button class="accordion-trigger w-full text-left p-4 bg-white rounded-lg shadow mb-2 hover:shadow-md transition-shadow">
-            <div class="flex items-center justify-between">
-              <span class="text-lg font-semibold">How long does a typical project take?</span>
-              <span class="text-2xl">+</span>
-            </div>
-          </button>
-          <div class="accordion-content hidden p-4 bg-white rounded-lg shadow">
-            <p class="text-gray-600">Project timelines vary based on complexity. A simple website might take 4-6 weeks, while complex applications can take 3-6 months.</p>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <button class="accordion-trigger w-full text-left p-4 bg-white rounded-lg shadow mb-2 hover:shadow-md transition-shadow">
-            <div class="flex items-center justify-between">
-              <span class="text-lg font-semibold">Do you provide ongoing support?</span>
-              <span class="text-2xl">+</span>
-            </div>
-          </button>
-          <div class="accordion-content hidden p-4 bg-white rounded-lg shadow">
-            <p class="text-gray-600">Yes! We offer comprehensive support packages including maintenance, updates, security patches, and 24/7 monitoring.</p>
-          </div>
-        </div>
+    <!-- FAQ Section - Now using SimpleSection with collection data -->
+    <SimpleSection 
+      variant="accordion" 
+      collection="faq"
+      query="getAll"
+      variantProps={{
+        style: "cards",
+        backgroundColor: "bg-gray-50",
+        sectionPadding: "py-16"
+      }}
+    >
+      <div slot="heading">
+        <h2 class="text-4xl font-bold text-center mb-12">Frequently Asked Questions</h2>
       </div>
-    </Section>
+      <div slot="description">
+        <p class="text-xl text-gray-600 text-center mb-12">Find answers to common questions about our services.</p>
+      </div>
+    </SimpleSection>
 
     <!-- CTA Section -->
-    <Section variant="centered" variantProps={{
+    <SimpleSection variant="centered" variantProps={{
       backgroundColor: "bg-gradient-to-r from-blue-600 to-purple-600",
       textColor: "text-white",
       sectionPadding: "py-20"
     }}>
-      <div slot="additional">
+      <div slot="heading">
         <h2 class="text-4xl font-bold mb-6">Ready to Start Your Project?</h2>
+      </div>
+      <div slot="description">
         <p class="text-xl mb-8 opacity-90">Let's create something amazing together. Get in touch today!</p>
+      </div>
+      <div slot="additional">
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <a href="/contact" class="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center">
             Get Started
@@ -277,7 +226,7 @@ import Card from '@/components/Card.astro';
           </a>
         </div>
       </div>
-    </Section>
+    </SimpleSection>
   </main>
 </BaseLayout>
 

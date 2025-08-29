@@ -1,10 +1,8 @@
 ---
 // src/components/Section/Variants/Hero.astro
-// Enhanced Hero variant component for modern websites
-// Usage: <Section variant="hero"><Hero /></Section>
-
+// Simplified Hero variant component to fix the "get" error
 interface Props {
-  heading?: string | any;
+  heading?: string;
   description?: string;
   buttons?: any[];
   backgroundImage?: string;
@@ -18,7 +16,6 @@ interface Props {
   showStats?: boolean;
   stats?: Array<{ number: string; label: string }>;
   showScrollIndicator?: boolean;
-  // New props for collection integration
   collectionData?: any[];
   meta?: any;
 }
@@ -42,25 +39,23 @@ const {
     { number: "24/7", label: "Support" }
   ],
   showScrollIndicator = true,
-  // New props for collection integration
   collectionData = [],
   meta = {}
 } = Astro.props;
 
-// Use collection data if available, otherwise use props
-const finalHeading = collectionData.length > 0 ? collectionData[0]?.data?.title || heading : heading;
-const finalDescription = collectionData.length > 0 ? collectionData[0]?.data?.description || description : description;
-const finalButtons = buttons.length > 0 ? buttons : (collectionData[0]?.data?.buttons || []);
-const finalBackgroundImage = backgroundImage || collectionData[0]?.data?.featuredImage;
+// Simple fallback logic without complex operations
+const finalHeading = heading;
+const finalDescription = description;
+const finalButtons = buttons || [];
+const finalBackgroundImage = backgroundImage;
 
-// Check if backgroundColor is a Tailwind class or CSS value
-const isTailwindClass = backgroundColor && backgroundColor.startsWith('bg-');
-const bgClass = isTailwindClass ? backgroundColor : '';
-const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundColor}` : '';
+// Simple background class check
+const bgClass = backgroundColor && backgroundColor.startsWith('bg-') ? backgroundColor : '';
+const bgStyle = backgroundColor && !backgroundColor.startsWith('bg-') ? `background: ${backgroundColor}` : '';
 ---
 
 <div class={`hero-variant relative w-full overflow-hidden ${sectionPadding}`} style={`min-height: ${minHeight}`}>
-  {/* Background with gradient overlay */}
+  <!-- Background -->
   {finalBackgroundImage ? (
     <div 
       class="absolute inset-0 bg-cover bg-center bg-fixed z-0"
@@ -72,22 +67,22 @@ const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundC
       ></div>
     </div>
   ) : (
-    <div class={`absolute inset-0 opacity-90 ${bgClass}`} style={bgStyle || 'background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-accent) 100%)'}>
+    <div class={`absolute inset-0 opacity-90 ${bgClass}`} style={bgStyle || 'background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #059669 100%)'}>
     </div>
   )}
   
-  {/* Animated background elements */}
+  <!-- Animated background elements -->
   <div class="absolute inset-0 z-0">
     <div class="absolute top-20 left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
     <div class="absolute bottom-20 right-20 w-96 h-96 bg-white/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
     <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/5 rounded-full blur-3xl animate-pulse delay-500"></div>
   </div>
   
-  {/* Main content */}
+  <!-- Main content -->
   <div class="relative z-10 flex items-center justify-center h-full px-4 sm:px-6 lg:px-8">
     <div class="text-center max-w-6xl mx-auto">
       
-      {/* Badge */}
+      <!-- Badge -->
       {showBadge && (
         <div class="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm font-medium mb-8 animate-fade-in-up">
           <span class="mr-2">✨</span>
@@ -95,7 +90,7 @@ const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundC
         </div>
       )}
       
-      {/* Main heading */}
+      <!-- Main heading -->
       <slot name="heading">
         <h1 class="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 leading-tight animate-fade-in-up animation-delay-200">
           <span class="bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent">
@@ -104,30 +99,23 @@ const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundC
         </h1>
       </slot>
       
-      {/* Description */}
+      <!-- Description -->
       <slot name="description">
         <p class="text-xl sm:text-2xl lg:text-3xl mb-12 max-w-4xl mx-auto leading-relaxed opacity-90 animate-fade-in-up animation-delay-400">
           {finalDescription}
         </p>
       </slot>
       
-      {/* Buttons */}
+      <!-- Buttons -->
       <slot name="buttons">
-        {finalButtons && finalButtons.length > 0 ? (
+        {finalButtons.length > 0 ? (
           <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 animate-fade-in-up animation-delay-600">
-            {finalButtons.map((button, index) => (
+            {finalButtons.map((button: any) => (
               <a 
                 href={button?.link || "#"} 
-                class={`group relative px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-500 transform hover:scale-105 hover:-translate-y-1 ${
-                  button?.variant === "secondary" 
-                    ? "bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white hover:bg-white hover:text-[var(--color-primary)] hover:border-white shadow-2xl" 
-                    : "bg-white text-[var(--color-primary)] hover:bg-gray-100 shadow-2xl hover:shadow-white/25"
-                }`}
+                class="group relative px-8 py-4 rounded-2xl font-semibold text-lg bg-white text-blue-600 hover:bg-gray-100 shadow-2xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-1"
               >
                 <span class="relative z-10">{button?.text || "Learn More"}</span>
-                {button?.variant !== "secondary" && (
-                  <div class="absolute inset-0 bg-gradient-to-r from-white to-gray-100 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                )}
               </a>
             ))}
           </div>
@@ -135,14 +123,13 @@ const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundC
           <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 animate-fade-in-up animation-delay-600">
             <a 
               href="/contact"
-              class="group relative px-8 py-4 rounded-2xl font-semibold text-lg bg-white text-[var(--color-primary)] hover:bg-gray-100 shadow-2xl hover:shadow-white/25 transition-all duration-500 transform hover:scale-105 hover:-translate-y-1"
+              class="group relative px-8 py-4 rounded-2xl font-semibold text-lg bg-white text-blue-600 hover:bg-gray-100 shadow-2xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-1"
             >
               <span class="relative z-10">🚀 Get Started</span>
-              <div class="absolute inset-0 bg-gradient-to-r from-white to-gray-100 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </a>
             <a 
               href="/about"
-              class="px-8 py-4 rounded-2xl font-semibold text-lg bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white hover:bg-white hover:text-[var(--color-primary)] hover:border-white shadow-2xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-1"
+              class="px-8 py-4 rounded-2xl font-semibold text-lg bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white hover:bg-white hover:text-blue-600 hover:border-white shadow-2xl transition-all duration-500 transform hover:scale-105 hover:-translate-y-1"
             >
               📖 Learn More
             </a>
@@ -150,12 +137,12 @@ const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundC
         )}
       </slot>
       
-      {/* Stats section */}
+      <!-- Stats -->
       {showStats && (
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto mb-16 animate-fade-in-up animation-delay-800">
-          {stats.map((stat, index) => (
-            <div class="text-center group">
-              <div class="text-3xl sm:text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 animate-fade-in-up animation-delay-800">
+          {stats.map((stat) => (
+            <div class="text-center">
+              <div class="text-4xl sm:text-5xl font-bold text-white mb-2">
                 {stat.number}
               </div>
               <div class="text-white/80 text-sm sm:text-base font-medium">
@@ -166,7 +153,7 @@ const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundC
         </div>
       )}
       
-      {/* Scroll indicator */}
+      <!-- Scroll indicator -->
       {showScrollIndicator && (
         <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
           <div class="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
@@ -182,7 +169,7 @@ const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundC
 
 <style>
   .hero-variant {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-accent) 100%);
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #059669 100%);
   }
   
   /* Animation delays */
@@ -250,9 +237,5 @@ const bgStyle = !isTailwindClass && backgroundColor ? `background: ${backgroundC
   /* Enhanced shadows */
   .shadow-2xl {
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  }
-  
-  .shadow-white\/25 {
-    box-shadow: 0 25px 50px -12px rgba(255, 255, 255, 0.25);
   }
 </style>

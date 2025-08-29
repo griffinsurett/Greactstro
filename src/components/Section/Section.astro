@@ -19,8 +19,8 @@ const {
   variantProps = {},
   
   // Content collection props
-  collection,
-  query,
+  collectionName,
+  queryType,
   
   // Styling props
   sectionClass = "",
@@ -32,19 +32,16 @@ const {
 let collectionData: any[] = [];
 let meta: any = null;
 
-if (collection) {
+if (collectionName) {
   try {
     // Use dynamic import to avoid TypeScript issues with collection names
-    const { getCollection, getEntry } = await import("astro:content");
-    const collectionEntries = await getCollection(collection as any);
+    const { getCollection } = await import("astro:content");
+    const collectionEntries = await getCollection(collectionName as any);
     
     // Apply query filtering if specified
-    if (query === "featured") {
-      collectionData = collectionEntries.filter((item: any) => item.data.featured);
-    } else if (query === "related") {
-      // For now, just get all items - can be enhanced with actual relationship logic
+    if (queryType === "getAll" || queryType === "featured") {
       collectionData = collectionEntries;
-    } else if (query === "recent") {
+    } else if (queryType === "recent") {
       collectionData = collectionEntries
         .sort((a: any, b: any) => new Date(b.data.date || 0).getTime() - new Date(a.data.date || 0).getTime())
         .slice(0, 6);
@@ -52,15 +49,9 @@ if (collection) {
       collectionData = collectionEntries;
     }
     
-    // Get meta data if available
-    try {
-      const metaEntry = await getEntry(collection as any, "_meta");
-      meta = metaEntry?.data;
-    } catch {
-      // No meta file, that's okay
-    }
+    console.log(`Loaded ${collectionData.length} items from collection "${collectionName}"`);
   } catch (error) {
-    console.warn(`Could not load collection ${collection}:`, error);
+    console.warn(`Could not load collection ${collectionName}:`, error);
   }
 }
 

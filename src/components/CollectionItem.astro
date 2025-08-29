@@ -1,0 +1,73 @@
+---
+// src/components/CollectionItem.astro
+// Simple component to display collection items
+const { item, itemClass = "" } = Astro.props;
+---
+
+<div class={`collection-item ${itemClass} bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow`}>
+  {/* Icon */}
+  {item.data.icon && (
+    <div class="text-4xl mb-4 text-center">
+      {item.data.icon}
+    </div>
+  )}
+  
+  {/* Title */}
+  {item.data.title && (
+    <h3 class="text-xl font-semibold mb-3 text-gray-800">
+      {item.data.title}
+    </h3>
+  )}
+  
+  {/* Description */}
+  {item.data.description && (
+    <p class="text-gray-600 mb-4">
+      {item.data.description}
+    </p>
+  )}
+  
+  {/* Featured Image */}
+  {item.data.featuredImage && (
+    <div class="mb-4">
+      <img 
+        src={item.data.featuredImage} 
+        alt={item.data.title || 'Featured image'} 
+        class="w-full h-48 object-cover rounded-lg"
+      />
+    </div>
+  )}
+  
+  {/* Parent info */}
+  {item.data.parent && (
+    <div class="text-sm text-gray-500">
+      <span class="font-medium">Parent:</span> {item.data.parent}
+    </div>
+  )}
+  
+  {/* Tags */}
+  {item.data.tags && Array.isArray(item.data.tags) && item.data.tags.length > 0 && (
+    <div class="flex flex-wrap gap-2 mt-4">
+      {item.data.tags.map((tag: string) => (
+        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+          {tag}
+        </span>
+      ))}
+    </div>
+  )}
+  
+  {/* Date */}
+  {item.data.date && (
+    <div class="text-sm text-gray-500 mt-4">
+      <span class="font-medium">Date:</span> {new Date(item.data.date).toLocaleDateString()}
+    </div>
+  )}
+  
+  {/* Featured badge */}
+  {item.data.featured && (
+    <div class="absolute top-4 right-4">
+      <span class="px-2 py-1 bg-yellow-400 text-yellow-900 text-xs font-semibold rounded-full">
+        Featured
+      </span>
+    </div>
+  )}
+</div>
